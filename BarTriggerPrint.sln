@@ -5,6 +5,16 @@ VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarTriggerPrint", "BarTriggerPrint.csproj", "{865B66CA-CDD6-4974-888D-F9F4AC99E394}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{10F1D6D5-3F28-449B-A2E6-B0DEFE60B37B}"
+	ProjectSection(SolutionItems) = preProject
+		说明.txt = 说明.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{3254F04A-62A1-4618-B204-4EEF3A05B3DD}"
+	ProjectSection(SolutionItems) = preProject
+		..\BuildAndInstall.ps1 = ..\BuildAndInstall.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
