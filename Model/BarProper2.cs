@@ -16,12 +16,6 @@ namespace BarTriggerPrint.Model
             this.ProductDate = DateTime.Now;
         }
 
-        private string s;
-        [ItemsSource(typeof(Catetory1ItemsSource))]
-        [DisplayName("品类")]
-        public string Catetory1 { get; set; }
-
-
         [DisplayName("生产日期")]
         public DateTime ProductDate { get; set; }
 

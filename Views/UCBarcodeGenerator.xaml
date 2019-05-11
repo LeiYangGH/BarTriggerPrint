@@ -8,6 +8,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <!--<xctk:PropertyGrid AutoGenerateProperties="False">
             <xctk:PropertyGrid.PropertyDefinitions>
                 <xctk:PropertyDefinition Name="FirstName"  />
@@ -28,5 +32,8 @@
                 </xctk:PropertyGrid.EditorDefinitions>
 
         </xctk:PropertyGrid>
+        <Grid Grid.Column="1">
+            <Image  Source="{Binding CurrentBarcode, Converter={StaticResource bar2imgc}}"></Image>
+        </Grid>
     </Grid>
 </UserControl>

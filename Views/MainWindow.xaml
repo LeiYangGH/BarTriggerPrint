@@ -44,7 +44,7 @@
 
             </local:UCBarcodeGenerator>
             <Button Grid.Column="1" Command="{Binding ExportCommand}"
-                    HorizontalAlignment="Center" VerticalAlignment="Center" Content="测试"></Button>
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Content="预览"></Button>
         </Grid>
 
         <TextBox  Grid.Row="4"   IsReadOnly="True" HorizontalAlignment="Stretch"

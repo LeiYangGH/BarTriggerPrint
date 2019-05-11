@@ -103,7 +103,9 @@ namespace BarTriggerPrint.ViewModel
         {
             await Task.Run(() =>
             {
-                this.Message = this.BarcodeGeneratorViewModel.Name;
+                if (this.BarcodeGeneratorViewModel != null)
+                //this.Message = this.BarcodeGeneratorViewModel.Name;
+                this.Message = this.BarcodeGeneratorViewModel.GenerateBarcode();
             });
         }
 
