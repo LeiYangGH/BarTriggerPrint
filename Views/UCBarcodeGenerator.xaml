@@ -10,13 +10,23 @@
     <Grid>
         <!--<xctk:PropertyGrid AutoGenerateProperties="False">
             <xctk:PropertyGrid.PropertyDefinitions>
-                <xctk:PropertyDefinition Name="FirstName" />
+                <xctk:PropertyDefinition Name="FirstName"  />
                 <xctk:PropertyDefinition Name="FavoriteColor" />
                 <xctk:PropertyDefinition Name="PetNames" />
             </xctk:PropertyGrid.PropertyDefinitions>
         </xctk:PropertyGrid>-->
         <xctk:PropertyGrid AutoGenerateProperties="True" SelectedObject="{Binding BarProper}">
-           
+
+            <xctk:PropertyGrid.EditorDefinitions>
+                <xctk:EditorTemplateDefinition TargetProperties="ProductDate">
+                <xctk:EditorTemplateDefinition.EditingTemplate>
+                    <DataTemplate>
+                            <xctk:DateTimePicker Value="{Binding Value}" />
+                    </DataTemplate>
+                </xctk:EditorTemplateDefinition.EditingTemplate>
+            </xctk:EditorTemplateDefinition>
+                </xctk:PropertyGrid.EditorDefinitions>
+
         </xctk:PropertyGrid>
     </Grid>
 </UserControl>

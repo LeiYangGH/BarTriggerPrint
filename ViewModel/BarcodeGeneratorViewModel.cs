@@ -8,14 +8,17 @@ using System.Threading.Tasks;
 
 namespace BarTriggerPrint.ViewModel
 {
-    public class BarcodeGeneratorViewModel : ViewModelBase
+    public abstract class BarcodeGeneratorViewModel : ViewModelBase
     {
 
         public BarcodeGeneratorViewModel()
         {
-            this.BarProper = new BarProper();
+            //this.BarProper = new BarProper1();
         }
-        public BarProper BarProper { get; set; }
+
+        public string Name { get; protected set; }
+        public bool IsSelected { get; set; }
+        public BarProper BarProper { get; protected set; }
     }
 
 }

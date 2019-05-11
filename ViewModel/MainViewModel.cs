@@ -1,6 +1,7 @@
 using BarTriggerPrint.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace BarTriggerPrint.ViewModel
@@ -24,7 +25,12 @@ namespace BarTriggerPrint.ViewModel
         /// </summary>
         public MainViewModel()
         {
-            this.BarcodeGeneratorViewModel = new BarcodeGeneratorViewModel();
+            //this.BarcodeGeneratorViewModel = new Barcode1GeneratorViewModel();
+            this.ObsBarcodeGeneratorVMs = new ObservableCollection<BarcodeGeneratorViewModel>()
+            {
+                new Barcode1GeneratorViewModel(),
+                new Barcode2GeneratorViewModel()
+            };
         }
 
         private BarcodeGeneratorViewModel barcodeGeneratorViewModel;
@@ -44,6 +50,23 @@ namespace BarTriggerPrint.ViewModel
             }
         }
 
+
+        private ObservableCollection<BarcodeGeneratorViewModel> obsBarcodeGeneratorVMs;
+        public ObservableCollection<BarcodeGeneratorViewModel> ObsBarcodeGeneratorVMs
+        {
+            get
+            {
+                return this.obsBarcodeGeneratorVMs;
+            }
+            set
+            {
+                if (this.obsBarcodeGeneratorVMs != value)
+                {
+                    this.obsBarcodeGeneratorVMs = value;
+                    this.RaisePropertyChanged(nameof(ObsBarcodeGeneratorVMs));
+                }
+            }
+        }
 
 
 
@@ -75,17 +98,12 @@ namespace BarTriggerPrint.ViewModel
             }
         }
 
-        //private async Task Open()
-        //{
-        //    await Task.Run(() =>
-        //    {
-
-        //    });
+        
         private async Task Export()
         {
             await Task.Run(() =>
             {
-                this.Message = this.BarcodeGeneratorViewModel.BarProper.Catetory1;
+                this.Message = this.BarcodeGeneratorViewModel.Name;
             });
         }
 
