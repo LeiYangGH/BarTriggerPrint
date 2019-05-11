@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BarTriggerPrint
+namespace BarTriggerPrint.Views
 {
     /// <summary>
-    /// MainWindow.xaml 的交互逻辑
+    /// UCBarcodePreview.xaml 的交互逻辑
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class UCBarcodePreview : UserControl
     {
-        public MainWindow()
+        public UCBarcodePreview()
         {
             InitializeComponent();
         }
