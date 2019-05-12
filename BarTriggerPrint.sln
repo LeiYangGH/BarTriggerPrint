@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarTriggerPrint", "BarTrigg
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{10F1D6D5-3F28-449B-A2E6-B0DEFE60B37B}"
 	ProjectSection(SolutionItems) = preProject
+		众泰滑柱字段关联.xlsx = 众泰滑柱字段关联.xlsx
 		说明.txt = 说明.txt
 	EndProjectSection
 EndProject

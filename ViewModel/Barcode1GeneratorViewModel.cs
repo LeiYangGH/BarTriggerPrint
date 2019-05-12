@@ -23,7 +23,7 @@ namespace BarTriggerPrint.ViewModel
             sb.Append("#");
             sb.Append(p.SupplierNumber.Trim());
             sb.Append("#");
-            sb.Append(p.ProductDate.ToString("yyyyMMdd").Trim());
+            sb.Append(p.ProductDate.ToString("yyMMdd").Trim());
             sb.Append("#");
             sb.Append(p.GetNewSerialNumberString());
             this.CurrentBarcode = sb.ToString();

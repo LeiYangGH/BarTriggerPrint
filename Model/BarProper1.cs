@@ -1,6 +1,9 @@
-﻿using System;
+﻿using ExcelDataReader;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,33 +11,61 @@ using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace BarTriggerPrint.Model
 {
-    [CategoryOrder("固定值", 1)]
-    [CategoryOrder("变化值", 2)]
+    [CategoryOrder("可选值", 1)]
+    [CategoryOrder("匹配值", 2)]
+    [CategoryOrder("变化值", 3)]
     [DisplayName("请选择条码组成")]
     public class BarProper1 : BarProper
     {
+        public static DataTable dt;
+
         private int startNumber;
 
         public BarProper1()
         {
-            //this.LabelType = "6K00079-1";
             this.CustomerNumber = "";
             this.SupplierNumber = "";
             this.ProductDate = DateTime.Now;
+            if (BarProper1.dt == null)
+                BarProper1.dt = this.ReadExcel(Path.Combine(Constants.AppDataBarTriggerPrintDir,
+                    "众泰滑柱字段关联.xlsx")).Tables[0];
         }
 
-        //[PropertyOrder(1)]
-        //[Category("固定值")]
-        //[DisplayName("标签种类")]
-        //public string LabelType { get; set; }
+        private string labelType;
+        [PropertyOrder(1)]
+        [Category("可选值")]
+        [ItemsSource(typeof(Catetory1ItemsSource))]
+        [DisplayName("标签种类")]
+        public string LabelType
+        {
+            get
+            {
+                return this.labelType;
+            }
+            set
+            {
+                if (value != this.labelType)
+                {
+                    this.labelType = value;
+                    DataRow dr = dt.Rows.OfType<DataRow>()
+                        .First(r => r[0].ToString() == value.Trim());
+                    this.CustomerNumber = dr[1].ToString().Trim();
+                    this.OnPropertyChanged(nameof(CustomerNumber));
+                    this.SupplierNumber = dr[2].ToString().Trim();
+                    this.OnPropertyChanged(nameof(SupplierNumber));
+
+                }
+
+            }
+        }
 
         [PropertyOrder(2)]
-        [Category("固定值")]
+        [Category("匹配值")]
         [DisplayName("顾客零件号")]
         public string CustomerNumber { get; set; }
 
         [PropertyOrder(3)]
-        [Category("固定值")]
+        [Category("匹配值")]
         [DisplayName("供应商代码")]
         public string SupplierNumber { get; set; }
 
@@ -71,5 +102,16 @@ namespace BarTriggerPrint.Model
             this.serialNumber = (this.serialNumber + 1) % 100000;
             return sn;
         }
+
+        private DataSet ReadExcel(string excelFile)
+        {
+            using (var stream = File.Open(excelFile, FileMode.Open, FileAccess.Read))
+            {
+                var reader = ExcelReaderFactory.CreateReader(stream, this.excelReaderConfiguration);
+                var result = reader.AsDataSet(this.excelDataSetConfiguration);
+                return result;
+            }
+        }
+
     }
 }

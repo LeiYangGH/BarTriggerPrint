@@ -1,5 +1,8 @@
-﻿using System;
+﻿using ExcelDataReader;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,10 +16,15 @@ namespace BarTriggerPrint.Model
         public ItemCollection GetValues()
         {
             ItemCollection collection = new ItemCollection();
-            collection.Add("A");
-            collection.Add("BB");
-            collection.Add("CCC");
+            foreach (DataRow dr in BarProper1.dt.Rows)
+            {
+                string s = dr[0].ToString().Trim();
+                collection.Add(s);
+            }
             return collection;
         }
+
+
+
     }
 }
