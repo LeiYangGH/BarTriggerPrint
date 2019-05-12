@@ -48,6 +48,9 @@ namespace BarTriggerPrint.ViewModel
         }
 
         public abstract string GenerateBarcode();
+
+
+ 
     }
 
 }

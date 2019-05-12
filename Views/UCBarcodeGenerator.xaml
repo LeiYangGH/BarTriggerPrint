@@ -10,7 +10,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
         <!--<xctk:PropertyGrid AutoGenerateProperties="False">
             <xctk:PropertyGrid.PropertyDefinitions>
