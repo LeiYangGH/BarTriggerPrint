@@ -23,8 +23,17 @@ namespace BarTriggerPrint.Views
         public MainWindow()
         {
             InitializeComponent();
+            this.ShowVersion();
             Log.Instance.Logger.Info("\r\nend of MainWindow()!");
+        }
 
+        private void ShowVersion()
+        {
+            string version = System.Reflection.Assembly.GetExecutingAssembly()
+                                           .GetName()
+                                           .Version
+                                           .ToString();
+            this.Title += " -" + version;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
