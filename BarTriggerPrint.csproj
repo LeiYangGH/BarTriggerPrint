@@ -100,6 +100,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Constants.cs" />
     <Compile Include="Converters\Barcode2ImageConverter.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Model\BarProper.cs" />

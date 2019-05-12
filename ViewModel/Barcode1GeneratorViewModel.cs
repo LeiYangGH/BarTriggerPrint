@@ -11,7 +11,7 @@ namespace BarTriggerPrint.ViewModel
     {
         public Barcode1GeneratorViewModel()
         {
-            this.Name = "产品1";
+            this.Name = Constants.ProductName1;
             this.BarProper = new BarProper1();
         }
 

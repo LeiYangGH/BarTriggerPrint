@@ -2,6 +2,7 @@ using BarTriggerPrint.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace BarTriggerPrint.ViewModel
@@ -162,7 +163,22 @@ namespace BarTriggerPrint.ViewModel
                 if (this.BarcodeGeneratorViewModel != null
                 && !string.IsNullOrEmpty(this.BarcodeGeneratorViewModel.CurrentBarcode))
                 {
-                    string zpl = PrintHelper.GenerateBarcodeZpl(this.BarcodeGeneratorViewModel.CurrentBarcode);
+                    string zplTemplateFile = this.BarcodeGeneratorViewModel.GetZplTemplateFile();
+                    string zpl = "";
+                    if (File.Exists(zplTemplateFile))
+                    {
+                        Log.Instance.Logger.Info($"正在从模板{zplTemplateFile}替换zpl。");
+
+                        zpl = PrintHelper.GenerateLabelZplByTempate(
+                          this.BarcodeGeneratorViewModel.CurrentBarcode,
+                          zplTemplateFile
+                          );
+                    }
+                    else
+                    {
+                        Log.Instance.Logger.Info($"未找到模板{zplTemplateFile}，自动生成zpl作测试。");
+                        zpl = PrintHelper.GenerateBarcodeZpl(this.BarcodeGeneratorViewModel.CurrentBarcode);
+                    }
                     PrintHelper.RawPrintZplString(zpl);
                 }
                 this.Message = "测试打印结束。";

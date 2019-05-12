@@ -31,6 +31,15 @@ namespace BarTriggerPrint
 
         }
 
+
+        public static string GenerateLabelZplByTempate(string barcode, string templateZplFile)
+        {
+            string templateContent = File.ReadAllText(templateZplFile, Encoding.UTF8);
+            string replacedZpl = templateContent.Replace(Constants.BarcodeToBeReplaced, barcode);
+            Log.Instance.Logger.Info($"从模板{templateZplFile}替换了条码{barcode}。");
+            return replacedZpl;
+        }
+
         public static Stream GenerateStreamFromString(string s)
         {
             var stream = new MemoryStream();

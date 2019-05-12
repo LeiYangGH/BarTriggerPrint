@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,15 +36,16 @@ namespace BarTriggerPrint.ViewModel
             }
         }
 
-        //public string CurrentBarcode
-        //{
-        //    get;
-        //    protected set;
-        //}
 
         public string Name { get; protected set; }
         public bool IsSelected { get; set; }
         public BarProper BarProper { get; protected set; }
+
+
+        public string GetZplTemplateFile()
+        {
+            return Path.Combine(Constants.ZplTemplatesDir, this.Name + ".prn");
+        }
 
         public abstract string GenerateBarcode();
     }
