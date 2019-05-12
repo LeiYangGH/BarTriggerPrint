@@ -19,7 +19,7 @@ namespace BarTriggerPrint.ViewModel
         public override string GenerateBarcode()
         {
             var p = this.BarProper as BarProper2;
-            this.CurrentBarcode = $"{p.ProductDate}_{p.StartNumber}";
+            this.CurrentBarcode = $"{p.ProductDate.ToString("yyyyMMdd")}_{p.StartNumber}";
             return this.CurrentBarcode;
         }
     }
