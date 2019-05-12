@@ -47,7 +47,7 @@
             <Button Grid.Column="1" Command="{Binding ExportCommand}"
                     HorizontalAlignment="Center" VerticalAlignment="Center" Content="预览"></Button>
             <Button Grid.Column="2" Command="{Binding PrintCommand}"
-                    HorizontalAlignment="Center" VerticalAlignment="Center" Content="打印"></Button>
+                    HorizontalAlignment="Center" VerticalAlignment="Center" Content="测试打印"></Button>
         </Grid>
 
         <TextBox  Grid.Row="4"   IsReadOnly="True" HorizontalAlignment="Stretch"
