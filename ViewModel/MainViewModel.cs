@@ -25,7 +25,6 @@ namespace BarTriggerPrint.ViewModel
         /// </summary>
         public MainViewModel()
         {
-            //this.BarcodeGeneratorViewModel = new Barcode1GeneratorViewModel();
             this.ObsBarcodeGeneratorVMs = new ObservableCollection<BarcodeGeneratorViewModel>()
             {
                 new Barcode1GeneratorViewModel(),
@@ -98,14 +97,13 @@ namespace BarTriggerPrint.ViewModel
             }
         }
 
-        
+
         private async Task Export()
         {
             await Task.Run(() =>
             {
                 if (this.BarcodeGeneratorViewModel != null)
-                //this.Message = this.BarcodeGeneratorViewModel.Name;
-                this.Message = this.BarcodeGeneratorViewModel.GenerateBarcode();
+                    this.Message = this.BarcodeGeneratorViewModel.GenerateBarcode();
             });
         }
 
@@ -125,6 +123,54 @@ namespace BarTriggerPrint.ViewModel
                 }
             }
         }
+
+
+
+        private bool isPrinting;
+        private RelayCommand printCommand;
+
+        public RelayCommand PrintCommand
+        {
+            get
+            {
+                return printCommand
+                  ?? (printCommand = new RelayCommand(
+                    async () =>
+                    {
+                        if (isPrinting)
+                        {
+                            return;
+                        }
+
+                        isPrinting = true;
+                        PrintCommand.RaiseCanExecuteChanged();
+
+                        await Print();
+
+                        isPrinting = false;
+                        PrintCommand.RaiseCanExecuteChanged();
+                    },
+                    () => !isPrinting));
+            }
+        }
+
+
+        private async Task Print()
+        {
+            await Task.Run(() =>
+            {
+                if (this.BarcodeGeneratorViewModel != null
+                && !string.IsNullOrEmpty(this.BarcodeGeneratorViewModel.CurrentBarcode))
+                {
+                    string zpl = PrintHelper.GenerateBarcodeZpl(this.BarcodeGeneratorViewModel.CurrentBarcode);
+                    PrintHelper.RawPrintZplString(zpl);
+                }
+                this.Message = "≤‚ ‘¥Ú”°Ω· ¯°£";
+            });
+        }
+
+
+
 
 
     }

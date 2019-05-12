@@ -13,17 +13,26 @@ namespace BarTriggerPrint
     {
         public static Bitmap Generate2(string text, int width, int height)
         {
-            BarcodeWriter writer = new BarcodeWriter();
-            writer.Format = BarcodeFormat.CODE_128;
-            EncodingOptions options = new EncodingOptions()
+            try
             {
-                Width = width,
-                Height = height,
-                Margin = 2
-            };
-            writer.Options = options;
-            Bitmap map = writer.Write(text);
-            return map;
+                BarcodeWriter writer = new BarcodeWriter();
+                writer.Format = BarcodeFormat.CODE_128;
+                EncodingOptions options = new EncodingOptions()
+                {
+                    Width = width,
+                    Height = height,
+                    Margin = 2
+                };
+                writer.Options = options;
+                Bitmap map = writer.Write(text);
+                return map;
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Logger.Error(ex.Message);
+                return null;
+            }
+
         }
     }
 }

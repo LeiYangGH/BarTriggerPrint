@@ -23,6 +23,13 @@ namespace BarTriggerPrint.Views
         public MainWindow()
         {
             InitializeComponent();
+            Log.Instance.Logger.Info("\r\nend of MainWindow()!");
+
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Log.Instance.Logger.Info("\r\nend of Window_Closing()!");
         }
     }
 }
