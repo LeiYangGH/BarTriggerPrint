@@ -1,6 +1,6 @@
-using BarTriggerPrint.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Seagull.BarTender.Print;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -21,53 +21,131 @@ namespace BarTriggerPrint.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        private Engine m_engine = null;
+
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel()
         {
-            this.ObsBarcodeGeneratorVMs = new ObservableCollection<BarcodeGeneratorViewModel>()
+            if (IsInDesignMode)
             {
-                new Barcode1GeneratorViewModel(),
-                new Barcode2GeneratorViewModel()
-            };
+            }
+            else
+            {
+                //this.CreateSampleData();
+
+                this.ListBtwDirs();
+            }
         }
 
-        private BarcodeGeneratorViewModel barcodeGeneratorViewModel;
-        public BarcodeGeneratorViewModel BarcodeGeneratorViewModel
+
+
+
+        private Engine BtEngine
         {
             get
             {
-                return this.barcodeGeneratorViewModel;
+                if (m_engine == null)
+                {
+                    m_engine = new Engine(true);
+                }
+                return m_engine;
+            }
+        }
+
+
+        private void CreateSampleData()
+        {
+            this.ObsBtwDirs = new ObservableCollection<string>() { "鸡饲料", "鱼饲料", "猪饲料" };
+            this.ObsBtwFiles = new ObservableCollection<string>() { "111", "222", "333", "444", "555", "666", "777", "888", "999" };
+        }
+
+        private void ListBtwDirs()
+        {
+            string[] dirs = Directory.GetDirectories(Constants.btwTopDir);
+            this.ObsBtwDirs = new ObservableCollection<string>(dirs);
+
+        }
+
+        private void ListBtwFilesInDir(string dir)
+        {
+            string[] files = Directory.GetFiles(dir, "*.btw");
+            this.ObsBtwFiles = new ObservableCollection<string>(files);
+
+        }
+
+        private ObservableCollection<string> obsBtwDirs;
+        public ObservableCollection<string> ObsBtwDirs
+        {
+            get
+            {
+                return this.obsBtwDirs;
             }
             set
             {
-                if (this.barcodeGeneratorViewModel != value)
+                if (this.obsBtwDirs != value)
                 {
-                    this.barcodeGeneratorViewModel = value;
-                    this.RaisePropertyChanged(nameof(BarcodeGeneratorViewModel));
+                    this.obsBtwDirs = value;
+                    this.RaisePropertyChanged(nameof(ObsBtwDirs));
                 }
             }
         }
 
 
-        private ObservableCollection<BarcodeGeneratorViewModel> obsBarcodeGeneratorVMs;
-        public ObservableCollection<BarcodeGeneratorViewModel> ObsBarcodeGeneratorVMs
+        private string selectedBtwDir;
+        public string SelectedBtwDir
         {
             get
             {
-                return this.obsBarcodeGeneratorVMs;
+                return this.selectedBtwDir;
             }
             set
             {
-                if (this.obsBarcodeGeneratorVMs != value)
+                if (this.selectedBtwDir != value)
                 {
-                    this.obsBarcodeGeneratorVMs = value;
-                    this.RaisePropertyChanged(nameof(ObsBarcodeGeneratorVMs));
+                    this.selectedBtwDir = value;
+                    this.ListBtwFilesInDir(value);
+                    this.RaisePropertyChanged(nameof(SelectedBtwDir));
                 }
             }
         }
 
+        private ObservableCollection<string> obsBtwFiles;
+        public ObservableCollection<string> ObsBtwFiles
+        {
+            get
+            {
+                return this.obsBtwFiles;
+            }
+            set
+            {
+                if (this.obsBtwFiles != value)
+                {
+                    this.obsBtwFiles = value;
+                    this.RaisePropertyChanged(nameof(ObsBtwFiles));
+                }
+            }
+        }
+
+
+        private string selectedBtwFile;
+        public string SelectedBtwFile
+        {
+            get
+            {
+                return this.selectedBtwFile;
+            }
+            set
+            {
+                if (this.selectedBtwFile != value)
+                {
+                    this.selectedBtwFile = value;
+                    this.RaisePropertyChanged(nameof(SelectedBtwFile));
+                }
+            }
+        }
 
 
         private bool isExporting;
@@ -103,8 +181,7 @@ namespace BarTriggerPrint.ViewModel
         {
             await Task.Run(() =>
             {
-                if (this.BarcodeGeneratorViewModel != null)
-                    this.Message = this.BarcodeGeneratorViewModel.GenerateBarcode();
+              
             });
         }
 
@@ -160,32 +237,48 @@ namespace BarTriggerPrint.ViewModel
         {
             await Task.Run(() =>
             {
-                if (this.BarcodeGeneratorViewModel != null
-                && !string.IsNullOrEmpty(this.BarcodeGeneratorViewModel.CurrentBarcode))
-                {
-                    string zplTemplateFile = this.BarcodeGeneratorViewModel.GetZplTemplateFile();
-                    string zpl = "";
-                    if (File.Exists(zplTemplateFile))
-                    {
-                        Log.Instance.Logger.Info($"正在从模板{zplTemplateFile}替换zpl。");
-
-                        zpl = PrintHelper.GenerateLabelZplByTempate(
-                          this.BarcodeGeneratorViewModel.CurrentBarcode,
-                          zplTemplateFile
-                          );
-                    }
-                    else
-                    {
-                        Log.Instance.Logger.Info($"未找到模板{zplTemplateFile}，自动生成zpl作测试。");
-                        zpl = PrintHelper.GenerateBarcodeZpl(this.BarcodeGeneratorViewModel.CurrentBarcode);
-                    }
-                    PrintHelper.RawPrintZplString(zpl);
-                }
-                this.Message = "测试打印结束。";
+                string msg = BtwPrintWrapper.PrintBtwFile(this.SelectedBtwFile, this.BtEngine);
+                this.Message = msg.Trim();
             });
         }
 
+        #region IDisposable Support
+        private bool disposedValue = false; // 要检测冗余调用
 
+        void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: 释放托管状态(托管对象)。
+                    if (this.m_engine != null)
+                        this.m_engine.Stop();
+                    this.m_engine.Dispose();
+                }
+
+                // TODO: 释放未托管的资源(未托管的对象)并在以下内容中替代终结器。
+                // TODO: 将大型字段设置为 null。
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: 仅当以上 Dispose(bool disposing) 拥有用于释放未托管资源的代码时才替代终结器。
+        // ~MainViewModel() {
+        //   // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
+        //   Dispose(false);
+        // }
+
+        // 添加此代码以正确实现可处置模式。
+        public void Dispose()
+        {
+            // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。
+            Dispose(true);
+            // TODO: 如果在以上内容中替代了终结器，则取消注释以下行。
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
 
 
 

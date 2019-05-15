@@ -16,7 +16,7 @@ namespace BarTriggerPrint
     AppDataBarTriggerPrintDir, ZplTemplates);
         public const string ProductName1 = "众泰滑柱";
         public const string ProductName2 = "产品2";
-
+        public static readonly string btwTopDir = Path.Combine(AppDataBarTriggerPrintDir, "打印模板");
 
     }
 }
