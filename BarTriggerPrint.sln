@@ -7,6 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarTriggerPrint", "BarTrigg
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc", "doc", "{10F1D6D5-3F28-449B-A2E6-B0DEFE60B37B}"
 	ProjectSection(SolutionItems) = preProject
+		字段别名.xml = 字段别名.xml
 		说明.txt = 说明.txt
 	EndProjectSection
 EndProject
@@ -14,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{3254F04A
 	ProjectSection(SolutionItems) = preProject
 		..\BuildAndInstall.ps1 = ..\BuildAndInstall.ps1
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FieldsAliasReaderWriter", "..\FieldsAliasReaderWriter\FieldsAliasReaderWriter.csproj", "{8DAFD6B9-A3EA-482C-AED5-8C9E9406C02F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +28,10 @@ Global
 		{865B66CA-CDD6-4974-888D-F9F4AC99E394}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{865B66CA-CDD6-4974-888D-F9F4AC99E394}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{865B66CA-CDD6-4974-888D-F9F4AC99E394}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DAFD6B9-A3EA-482C-AED5-8C9E9406C02F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DAFD6B9-A3EA-482C-AED5-8C9E9406C02F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DAFD6B9-A3EA-482C-AED5-8C9E9406C02F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DAFD6B9-A3EA-482C-AED5-8C9E9406C02F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

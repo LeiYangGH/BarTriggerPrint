@@ -1,10 +1,14 @@
+using BarTriggerPrint.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Seagull.BarTender.Print;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace BarTriggerPrint.ViewModel
 {
@@ -23,7 +27,7 @@ namespace BarTriggerPrint.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private Engine m_engine = null;
-
+        private LabelOperator labelOperator;
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -35,13 +39,49 @@ namespace BarTriggerPrint.ViewModel
             }
             else
             {
+                this.labelOperator = new LabelOperator(this.BtEngine);
                 //this.CreateSampleData();
 
                 this.ListBtwDirs();
+                this.CreateShifts();
+                this.SelectedDate = DateTime.Today;
+                this.StartingNumberString = "0001";
+                this.ReadFieldsAliasXml();
+            }
+        }
+
+        private void ReadFieldsAliasXml()
+        {
+
+            XElement rules = XElement.Load(Constants.FieldsAliasXmlFile);
+            foreach (var standardName in rules.Elements())
+            {
+                var t2s = new List<string>();
+                foreach (var t2 in standardName.Elements())
+                {
+                    t2s.Add(t2.Name.LocalName);
+                }
+                Constants.FieldsAliasDict.Add(standardName.Name.LocalName, t2s.ToArray());
             }
         }
 
 
+        private void SetFieldsEnabled()
+        {
+            this.LabelHasShift = this.labelOperator.IsFieldInLabelFile("班次", this.SelectedBtwFile);
+            this.LabelHasDate = this.labelOperator.IsFieldInLabelFile("日期", this.SelectedBtwFile);
+            this.LabelHasSN = this.labelOperator.IsFieldInLabelFile("序列号", this.SelectedBtwFile);
+        }
+
+        private void CreateShifts()
+        {
+            this.ObsShifts = new ObservableCollection<Shift>()
+            {
+                new Shift(1),
+                new Shift(2),
+                new Shift(3),
+            };
+        }
 
 
         private Engine BtEngine
@@ -94,6 +134,76 @@ namespace BarTriggerPrint.ViewModel
             }
         }
 
+
+        private ObservableCollection<Shift> obsShifts;
+        public ObservableCollection<Shift> ObsShifts
+        {
+            get
+            {
+                return this.obsShifts;
+            }
+            set
+            {
+                if (this.obsShifts != value)
+                {
+                    this.obsShifts = value;
+                    this.RaisePropertyChanged(nameof(ObsShifts));
+                }
+            }
+        }
+
+
+        private bool labelHasShift;
+        public bool LabelHasShift
+        {
+            get
+            {
+                return this.labelHasShift;
+            }
+            set
+            {
+                if (this.labelHasShift != value)
+                {
+                    this.labelHasShift = value;
+                    this.RaisePropertyChanged(nameof(LabelHasShift));
+                }
+            }
+        }
+
+        private bool labelHasDate;
+        public bool LabelHasDate
+        {
+            get
+            {
+                return this.labelHasDate;
+            }
+            set
+            {
+                if (this.labelHasDate != value)
+                {
+                    this.labelHasDate = value;
+                    this.RaisePropertyChanged(nameof(LabelHasDate));
+                }
+            }
+        }
+
+
+        private bool labelHasSN;
+        public bool LabelHasSN
+        {
+            get
+            {
+                return this.labelHasSN;
+            }
+            set
+            {
+                if (this.labelHasSN != value)
+                {
+                    this.labelHasSN = value;
+                    this.RaisePropertyChanged(nameof(LabelHasSN));
+                }
+            }
+        }
 
         private string selectedBtwDir;
         public string SelectedBtwDir
@@ -178,6 +288,7 @@ namespace BarTriggerPrint.ViewModel
                 {
                     this.selectedBtwFile = value;
                     this.RaisePropertyChanged(nameof(SelectedBtwFile));
+                    this.SetFieldsEnabled();
                 }
             }
         }

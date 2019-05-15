@@ -9,7 +9,8 @@
         
         mc:Ignorable="d"
         Closing="Window_Closing"
-        Title="在线打印系统" Height="450" Width="800">
+        Title="在线打印系统" Height="450" Width="800"
+        FontSize="16">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -20,18 +21,35 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBlock>功能选择</TextBlock>
-        <Grid Grid.Row="1">
+
+        <!--输入字段-->
+        <Grid Grid.Row="1" ShowGridLines="True">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition ></ColumnDefinition>
+                <ColumnDefinition IsEnabled="False"></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="0">生产日期</TextBlock>
-            <TextBlock Grid.Column="1">生产批号</TextBlock>
-            <TextBlock Grid.Column="2">打印数量</TextBlock>
-            <TextBlock Grid.Column="3">起始包号</TextBlock>
+            <TextBlock Grid.Column="0" HorizontalAlignment="Center">班次</TextBlock>
+            <TextBlock Grid.Column="1" HorizontalAlignment="Center">日期</TextBlock>
+            <TextBlock Grid.Column="2" HorizontalAlignment="Center">起始序号</TextBlock>
+            <ComboBox Grid.Row="1" Grid.Column="0" 
+                        IsEnabled="{Binding LabelHasShift, Mode=OneWay}"
+                      ItemsSource="{Binding ObsShifts, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedValuePath="ShiftValue"
+                      DisplayMemberPath="ShiftName"
+                      ></ComboBox>
+            <DatePicker Grid.Row="1" Grid.Column="1" 
+                        IsEnabled="{Binding LabelHasDate,Mode=OneWay}"
+                        SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged}"
+                        ></DatePicker>
+            <TextBox Grid.Row="1" Grid.Column="2"  
+                     IsEnabled="{Binding LabelHasSN,Mode=OneWay}"
+                     Text="{Binding StartingNumberString, UpdateSourceTrigger=PropertyChanged}" />
+
         </Grid>
         <Grid Grid.Row="2">
             <TextBox IsReadOnly="True" Text="模板1.btw"></TextBox>

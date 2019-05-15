@@ -17,6 +17,17 @@ namespace BarTriggerPrint
         public const string ProductName1 = "众泰滑柱";
         public const string ProductName2 = "产品2";
         public static readonly string btwTopDir = Path.Combine(AppDataBarTriggerPrintDir, "打印模板");
+        public static readonly string FieldsAliasXmlFile = 
+            Path.Combine(btwTopDir, "字段别名.xml");
+        public static readonly Dictionary<int, string> ShiftsIntStrDict =
+            new Dictionary<int, string>()
+            {
+                { 1, "早班" },
+                { 2, "中班" },
+                { 3, "晚班" }
+            };
 
+        public static readonly Dictionary<string, string[]> FieldsAliasDict =
+            new Dictionary<string, string[]>();
     }
 }
