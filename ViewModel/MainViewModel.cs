@@ -1,6 +1,7 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Seagull.BarTender.Print;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -112,6 +113,40 @@ namespace BarTriggerPrint.ViewModel
             }
         }
 
+        private DateTime selectedDate;
+        public DateTime SelectedDate
+        {
+            get
+            {
+                return this.selectedDate;
+            }
+            set
+            {
+                if (this.selectedDate != value)
+                {
+                    this.selectedDate = value;
+                    this.RaisePropertyChanged(nameof(SelectedDate));
+                }
+            }
+        }
+
+        private string startingNumberString;
+        public string StartingNumberString
+        {
+            get
+            {
+                return this.startingNumberString;
+            }
+            set
+            {
+                if (this.startingNumberString != value)
+                {
+                    this.startingNumberString = value;
+                    this.RaisePropertyChanged(nameof(StartingNumberString));
+                }
+            }
+        }
+
         private ObservableCollection<string> obsBtwFiles;
         public ObservableCollection<string> ObsBtwFiles
         {
@@ -181,7 +216,7 @@ namespace BarTriggerPrint.ViewModel
         {
             await Task.Run(() =>
             {
-              
+
             });
         }
 

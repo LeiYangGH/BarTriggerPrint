@@ -18,6 +18,7 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock>功能选择</TextBlock>
         <Grid Grid.Row="1">
@@ -52,8 +53,8 @@
         </Grid>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="4*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <ListBox ItemsSource="{Binding ObsBtwDirs, Mode=OneWay}" SelectedValue="{Binding SelectedBtwDir}">
                 <ListBox.ItemTemplate>
@@ -62,23 +63,27 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <ListBox Grid.Column="1" 
+            <Viewbox Grid.Column="1" HorizontalAlignment="Stretch">
+                <ListBox   
                      ItemsSource="{Binding ObsBtwFiles}" 
                      SelectedValue="{Binding SelectedBtwFile}"
                      ItemTemplate="{StaticResource templateBtwImage}"
                      >
-                <!--<ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Image MaxHeight="400" MaxWidth="400" Source="{Binding ., Converter={StaticResource btwf2ic},Mode=OneWay}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>-->
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="4"></UniformGrid>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-            </ListBox>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid 
+                                Columns="{Binding ElementName=sldCols,
+                                Path=Value}"></UniformGrid>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                </ListBox>
+            </Viewbox>
+
         </Grid>
-        <TextBox Grid.Row="5" MaxHeight="50" IsReadOnly="True" Text="{Binding Message,Mode=OneWay}" />
+        <Slider  Grid.Row="5"  x:Name="sldCols" Value="4"
+                                Minimum="1" Maximum="5" MinHeight="15"
+                                HorizontalAlignment="Stretch"  VerticalAlignment="Center"
+                                 ></Slider>
+        <TextBox Grid.Row="6" MaxHeight="50" IsReadOnly="True" Text="{Binding Message,Mode=OneWay}" />
     </Grid>
 </Window>
