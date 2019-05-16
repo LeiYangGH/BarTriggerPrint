@@ -63,7 +63,7 @@
         <!--image-->
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto" ></ColumnDefinition>
+                <ColumnDefinition  ></ColumnDefinition>
                 <ColumnDefinition Width="4"></ColumnDefinition>
                 <ColumnDefinition ></ColumnDefinition>
             </Grid.ColumnDefinitions>
@@ -76,9 +76,11 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" Width="3"/>
-            <Viewbox Grid.Column="2" HorizontalAlignment="Stretch">
-                <ListBox   
+            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch"  HorizontalAlignment="Center"
+                          Width="3"
+                          ResizeDirection="Columns"/>
+            <Viewbox Grid.Column="2" HorizontalAlignment="Stretch" >
+                <ListBox  
                      ItemsSource="{Binding ObsBtwFiles}" 
                      SelectedValue="{Binding SelectedBtwFile}"
                      ItemTemplate="{StaticResource templateBtwImage}"
@@ -92,6 +94,8 @@
                     </ListBox.ItemsPanel>
                 </ListBox>
             </Viewbox>
+
+           
 
         </Grid>
         <Slider  Grid.Row="4"  x:Name="sldCols" Value="4"
