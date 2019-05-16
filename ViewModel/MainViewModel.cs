@@ -5,6 +5,7 @@ using Seagull.BarTender.Print;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
@@ -357,6 +358,7 @@ namespace BarTriggerPrint.ViewModel
         }
 
 
+
         private string selectedBtwFile;
         public string SelectedBtwFile
         {
@@ -371,10 +373,35 @@ namespace BarTriggerPrint.ViewModel
                     this.selectedBtwFile = value;
                     this.RaisePropertyChanged(nameof(SelectedBtwFile));
                     this.SetFieldsEnabled();
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        Task.Run(() =>
+                        this.LoadPrintHistory(value)
+                        );
+                    }
                 }
             }
         }
 
+
+        private void LoadPrintHistory(string file)
+        {
+
+            string BtwTemplate = this.SelectedBtwFile.Replace(
+                      Constants.btwTopDir, "");
+
+            DataTable dt = SqliteHistory.QueryRecent(BtwTemplate, 1000);
+            this.ObsPrintHistoryVMs = new ObservableCollection<PrintHistoryViewModel>(
+                dt.Rows.OfType<DataRow>()
+                .Select(r => new PrintHistoryViewModel(
+                    BtwTemplate,
+                    r[0].ToString(),
+                    r[1].ToString()
+                    ))
+                );
+
+
+        }
 
         private bool isExporting;
         private RelayCommand exportCommand;

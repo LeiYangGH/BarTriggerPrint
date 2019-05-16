@@ -40,7 +40,7 @@ namespace BarTriggerPrint.Model
         {
             try
             {
-                string sql = "insert barcodehistory (componenttype, barcode, printdate) values (@componenttype, @barcode, @printdate)";
+                string sql = "insert into barcodehistory (componenttype, barcode, printdate) values (@componenttype, @barcode, @printdate)";
                 using (var conn = new SQLiteConnection(connStr))
                 {
                     var cmd = conn.CreateCommand();
