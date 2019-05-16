@@ -72,19 +72,27 @@ namespace BarTriggerPrint.ViewModel
         private static object obj = new object();
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
+            if (!this.IsListening)
+                return;
             if (!this.serialPort.IsOpen)
                 return;
             int bytes = this.serialPort.BytesToRead;
             byte[] buffer = new byte[bytes];
             this.serialPort.Read(buffer, 0, bytes);
-            //string recieved = this.serialPort.ReadExisting();
             string bytesString = BitConverter.ToString(buffer);
             Log.Instance.Logger.Info($"收到串口{Constants.SerialPortComName}数据:{bytesString}.");
             this.Message = $"收到串口{Constants.SerialPortComName}数据:{bytesString}.";
-            lock (obj)
+            if (bytesString == "01")
             {
-                Task.Run(() => this.Print());
+                lock (obj)
+                {
+                    Task.Run(() =>
+                    {
+                        this.Print();
+                    });
+                }
             }
+
         }
 
         private void ReadFieldsAliasXml()
@@ -195,6 +203,23 @@ namespace BarTriggerPrint.ViewModel
                 {
                     this.obsShifts = value;
                     this.RaisePropertyChanged(nameof(ObsShifts));
+                }
+            }
+        }
+
+        private bool isListening;
+        public bool IsListening
+        {
+            get
+            {
+                return this.isListening;
+            }
+            set
+            {
+                if (this.isListening != value)
+                {
+                    this.isListening = value;
+                    this.RaisePropertyChanged(nameof(IsListening));
                 }
             }
         }

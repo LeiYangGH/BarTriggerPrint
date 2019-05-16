@@ -23,7 +23,8 @@
         </Grid.RowDefinitions>
 
         <!--输入字段-->
-        <Grid Grid.Row="1" ShowGridLines="True">
+        <Grid Grid.Row="1" ShowGridLines="True" 
+              IsEnabled="{Binding IsListening,Mode=OneWay}">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -53,12 +54,15 @@
                      Text="{Binding StartingNumberString, UpdateSourceTrigger=PropertyChanged}" />
 
         </Grid>
-        <Grid Grid.Row="2">
-            <TextBox IsReadOnly="True" Text="模板1.btw"></TextBox>
-            <Button Command="{Binding PrintCommand}" 
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock Margin="10,3">监控检测串口</TextBlock>
+            <CheckBox IsChecked="{Binding IsListening, UpdateSourceTrigger=PropertyChanged}"
+                      Margin="5,3" VerticalAlignment="Center"
+                      ></CheckBox>
+            <Button Command="{Binding PrintCommand}"  Margin="20,3"
                     IsEnabled="{Binding SelectedBtwFile,Converter={StaticResource selbtwf2enablec}, Mode=OneWay}"
                     HorizontalAlignment="Right">打印</Button>
-        </Grid>
+        </StackPanel>
 
         <!--image-->
         <Grid Grid.Row="3">
@@ -95,7 +99,7 @@
                 </ListBox>
             </Viewbox>
 
-           
+
 
         </Grid>
         <Slider  Grid.Row="4"  x:Name="sldCols" Value="4"
