@@ -3,9 +3,7 @@
                     xmlns:local="clr-namespace:BarTriggerPrint.Views"
                     xmlns:vm="clr-namespace:BarTriggerPrint.ViewModel"
                     >
-    <DataTemplate x:Key="templateBtwDir">
 
-    </DataTemplate>
     <DataTemplate x:Key="templateBtwImage" DataType="string">
         <Border BorderThickness="2" BorderBrush="LightBlue" Margin="5">
 
@@ -25,7 +23,7 @@
 
     </DataTemplate>
 
- 
+
 
 
     <DataTemplate x:Key="templatePrintHistory" >

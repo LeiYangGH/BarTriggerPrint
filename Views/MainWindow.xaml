@@ -60,19 +60,24 @@
                     HorizontalAlignment="Right">打印</Button>
         </Grid>
 
+        <!--image-->
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="4*"></ColumnDefinition>
+                <ColumnDefinition Width="auto" ></ColumnDefinition>
+                <ColumnDefinition Width="4"></ColumnDefinition>
+                <ColumnDefinition ></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ListBox ItemsSource="{Binding ObsBtwDirs, Mode=OneWay}" SelectedValue="{Binding SelectedBtwDir}">
+            <ListBox HorizontalAlignment="Stretch"
+                ItemsSource="{Binding ObsBtwDirs, Mode=OneWay}" 
+                     SelectedValue="{Binding SelectedBtwDir}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding ., Converter={StaticResource btwdirc},Mode=OneWay}"/>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <Viewbox Grid.Column="1" HorizontalAlignment="Stretch">
+            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" Width="3"/>
+            <Viewbox Grid.Column="2" HorizontalAlignment="Stretch">
                 <ListBox   
                      ItemsSource="{Binding ObsBtwFiles}" 
                      SelectedValue="{Binding SelectedBtwFile}"

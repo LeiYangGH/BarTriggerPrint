@@ -550,7 +550,7 @@ namespace BarTriggerPrint.ViewModel
                         return;
                     }
                     Log.Instance.Logger.Info($"准备打印{this.SelectedBtwFile}!");
-#if DEBUG
+
                     string obarcodeHistroySuffix;
                     LabelFormatDocument label =
                     this.SetLabelValues(this.SelectedBtwFile, out obarcodeHistroySuffix);
@@ -566,7 +566,7 @@ namespace BarTriggerPrint.ViewModel
                                 DateTime.Now.ToString()
                ));
                     });
-
+#if DEBUG
                     this.Message = "DEBUG跳过真实打印";
 
 #else
