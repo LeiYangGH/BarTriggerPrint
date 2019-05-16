@@ -28,7 +28,7 @@ namespace BarTriggerPrint.ViewModel
     {
         private Engine m_engine = null;
         private LabelOperator labelOperator;
-
+        private static int currentSN = 0;
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -68,9 +68,9 @@ namespace BarTriggerPrint.ViewModel
 
         private void SetFieldsEnabled()
         {
-            this.LabelHasShift = this.labelOperator.IsFieldInLabelFile("班次", this.SelectedBtwFile);
-            this.LabelHasDate = this.labelOperator.IsFieldInLabelFile("日期", this.SelectedBtwFile);
-            this.LabelHasSN = this.labelOperator.IsFieldInLabelFile("序列号", this.SelectedBtwFile);
+            this.LabelHasShift = this.labelOperator.IsFieldInLabelFile(Constants.FieldShift, this.SelectedBtwFile);
+            this.LabelHasDate = this.labelOperator.IsFieldInLabelFile(Constants.FieldDate, this.SelectedBtwFile);
+            this.LabelHasSN = this.labelOperator.IsFieldInLabelFile(Constants.FieldSN, this.SelectedBtwFile);
         }
 
         private void CreateShifts()
@@ -275,6 +275,24 @@ namespace BarTriggerPrint.ViewModel
         }
 
 
+        private string selectedShift;
+        public string SelectedShift
+        {
+            get
+            {
+                return this.selectedShift;
+            }
+            set
+            {
+                if (this.selectedShift != value)
+                {
+                    this.selectedShift = value;
+                    this.RaisePropertyChanged(nameof(SelectedShift));
+                }
+            }
+        }
+
+
         private string selectedBtwFile;
         public string SelectedBtwFile
         {
@@ -378,12 +396,55 @@ namespace BarTriggerPrint.ViewModel
             }
         }
 
+        private LabelFormatDocument SetLabelValues(string file)
+        {
+            LabelFormatDocument label = this.labelOperator.OpenLabel(file);
+            string[] fieldsIn = this.labelOperator.GetLabelFields(file);
+            if (this.LabelHasShift)
+            {
+                string shiftValue = this.SelectedShift;
+                foreach (string field in fieldsIn.Intersect(
+                    Constants.FieldsAliasDict[Constants.FieldShift]
+                    .Union(new string[] { Constants.FieldShift })).Distinct())
+                {
+                    label.SubStrings[field].Value = shiftValue;
+                    Log.Instance.Logger.Info($"设置{field}={shiftValue}");
+                }
+            }
+            if (this.LabelHasDate)
+            {
+                string dateValue = this.SelectedDate.ToString("yyMMdd");
+                foreach (string field in fieldsIn.Intersect(
+                    Constants.FieldsAliasDict[Constants.FieldDate]
+                    .Union(new string[] { Constants.FieldDate })).Distinct())
+                {
+                    label.SubStrings[field].Value = dateValue;
+                    Log.Instance.Logger.Info($"设置{field}={dateValue}");
+
+                }
+            }
+
+            if (this.LabelHasSN)
+            {
+                string snValue = currentSN.ToString().PadLeft(4, '0');
+                foreach (string field in fieldsIn.Intersect(
+                    Constants.FieldsAliasDict[Constants.FieldSN]
+                    .Union(new string[] { Constants.FieldSN })).Distinct())
+                {
+                    label.SubStrings[field].Value = snValue;
+                    Log.Instance.Logger.Info($"设置{field}={snValue}");
+                }
+            }
+            return label;
+        }
 
         private async Task Print()
         {
             await Task.Run(() =>
             {
-                string msg = BtwPrintWrapper.PrintBtwFile(this.SelectedBtwFile, this.BtEngine);
+                LabelFormatDocument label = this.SetLabelValues(this.SelectedBtwFile);
+                string msg = BtwPrintWrapper.PrintBtwFile(label, this.BtEngine);
+                BtwPrintWrapper.PrintPreviewLabel2File(label, this.BtEngine);
                 this.Message = msg.Trim();
             });
         }
@@ -399,7 +460,7 @@ namespace BarTriggerPrint.ViewModel
                 {
                     // TODO: 释放托管状态(托管对象)。
                     if (this.m_engine != null)
-                        this.m_engine.Stop();
+                        this.m_engine.Stop(Seagull.BarTender.Print.SaveOptions.DoNotSaveChanges);
                     this.m_engine.Dispose();
                 }
 

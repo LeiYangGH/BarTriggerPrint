@@ -14,9 +14,9 @@ namespace BarTriggerPrint
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"BarTriggerPrint");
         public static readonly string ZplTemplatesDir = Path.Combine(
     AppDataBarTriggerPrintDir, ZplTemplates);
-        public const string ProductName1 = "众泰滑柱";
-        public const string ProductName2 = "产品2";
         public static readonly string btwTopDir = Path.Combine(AppDataBarTriggerPrintDir, "打印模板");
+        public static readonly string previewDir = 
+            Path.Combine(AppDataBarTriggerPrintDir, "打印预览");
         public static readonly string FieldsAliasXmlFile = 
             Path.Combine(btwTopDir, "字段别名.xml");
         public static readonly Dictionary<int, string> ShiftsIntStrDict =
@@ -29,5 +29,9 @@ namespace BarTriggerPrint
 
         public static readonly Dictionary<string, string[]> FieldsAliasDict =
             new Dictionary<string, string[]>();
+        public const string FieldShift = "班次";
+        public const string FieldDate = "日期";
+        public const string FieldSN = "序列号";
+
     }
 }

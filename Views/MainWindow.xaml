@@ -38,7 +38,9 @@
             <TextBlock Grid.Column="2" HorizontalAlignment="Center">起始序号</TextBlock>
             <ComboBox Grid.Row="1" Grid.Column="0" 
                         IsEnabled="{Binding LabelHasShift, Mode=OneWay}"
-                      ItemsSource="{Binding ObsShifts, UpdateSourceTrigger=PropertyChanged}"
+                      ItemsSource="{Binding ObsShifts, Mode=OneTime}"
+                      SelectedValue="{Binding SelectedShift,Mode=OneWayToSource,
+                UpdateSourceTrigger=PropertyChanged}"
                       SelectedValuePath="ShiftValue"
                       DisplayMemberPath="ShiftName"
                       ></ComboBox>
