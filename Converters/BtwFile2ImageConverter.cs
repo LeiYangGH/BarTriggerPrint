@@ -13,21 +13,30 @@ namespace BarTriggerPrint.Converters
             System.Globalization.CultureInfo culture)
         {
             string btwFileName = (string)value;
-            System.Drawing.Image btwImage = LabelFormatThumbnail.Create(btwFileName, System.Drawing.Color.Gray,
-   800, 800);
-            using (var ms = new MemoryStream())
+            try
             {
-                btwImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                ms.Position = 0;
+                System.Drawing.Image btwImage =
+                    LabelFormatThumbnail.Create(btwFileName, System.Drawing.Color.Gray, 500, 500);
+                using (var ms = new MemoryStream())
+                {
+                    btwImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    ms.Position = 0;
 
-                var bi = new BitmapImage();
-                bi.BeginInit();
-                bi.CacheOption = BitmapCacheOption.OnLoad;
-                bi.StreamSource = ms;
-                bi.EndInit();
-                btwImage.Dispose(); //if bmp is not used further.
-                return bi;
+                    var bi = new BitmapImage();
+                    bi.BeginInit();
+                    bi.CacheOption = BitmapCacheOption.OnLoad;
+                    bi.StreamSource = ms;
+                    bi.EndInit();
+                    btwImage.Dispose(); //if bmp is not used further.
+                    return bi;
+                }
             }
+            catch (Exception ex)
+            {
+                Log.Instance.Logger.Error($"获取缩略图错误:{ex.Message}");
+                return null;
+            }
+
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,

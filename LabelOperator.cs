@@ -22,14 +22,22 @@ namespace BarTriggerPrint
         {
             if (file != null && File.Exists(file))
             {
-                LabelFormatDocument label;
+                LabelFormatDocument label = null;
 
                 if (this.fileLableDict.ContainsKey(file))
                     label = this.fileLableDict[file];
                 else
                 {
-                    label = this.engine.Documents.Open(file);
-                    this.fileLableDict.Add(file, label);
+                    try
+                    {
+                        label = this.engine.Documents.Open(file);
+                        this.fileLableDict.Add(file, label);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Instance.Logger.Error($"打开btw标签出错{ex.Message}");
+                    }
+
                 }
 
                 return label;

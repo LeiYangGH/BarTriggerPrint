@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -29,6 +30,8 @@ namespace BarTriggerPrint.ViewModel
         private Engine m_engine = null;
         private LabelOperator labelOperator;
         private static int currentSN = 0;
+        private SerialPort serialPort;// = new SerialPort(Constants.SerialPortComName, 9600);
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -47,22 +50,59 @@ namespace BarTriggerPrint.ViewModel
                 this.SelectedDate = DateTime.Today;
                 this.StartingNumberString = "0001";
                 this.ReadFieldsAliasXml();
+                try
+                {
+                    this.serialPort = new SerialPort(Constants.SerialPortComName, 9600);
+                    this.serialPort.DataReceived += SerialPort_DataReceived;
+                    this.serialPort.Open();
+                }
+                catch (Exception ex)
+                {
+                    Log.Instance.Logger.Error($"初始化串口出错{ex.Message}");
+                }
+            }
+        }
+
+
+
+        private static object obj = new object();
+        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            if (!this.serialPort.IsOpen)
+                return;
+            int bytes = this.serialPort.BytesToRead;
+            byte[] buffer = new byte[bytes];
+            this.serialPort.Read(buffer, 0, bytes);
+            //string recieved = this.serialPort.ReadExisting();
+            string bytesString = BitConverter.ToString(buffer);
+            Log.Instance.Logger.Info($"收到串口{Constants.SerialPortComName}数据:{bytesString}.");
+            this.Message = $"收到串口{Constants.SerialPortComName}数据:{bytesString}.";
+            lock (obj)
+            {
+                Task.Run(() => this.Print());
             }
         }
 
         private void ReadFieldsAliasXml()
         {
-
-            XElement rules = XElement.Load(Constants.FieldsAliasXmlFile);
-            foreach (var standardName in rules.Elements())
+            try
             {
-                var t2s = new List<string>();
-                foreach (var t2 in standardName.Elements())
+                XElement rules = XElement.Load(Constants.FieldsAliasXmlFile);
+                foreach (var standardName in rules.Elements())
                 {
-                    t2s.Add(t2.Name.LocalName);
+                    var t2s = new List<string>();
+                    foreach (var t2 in standardName.Elements())
+                    {
+                        t2s.Add(t2.Name.LocalName);
+                    }
+                    Constants.FieldsAliasDict.Add(standardName.Name.LocalName, t2s.ToArray());
                 }
-                Constants.FieldsAliasDict.Add(standardName.Name.LocalName, t2s.ToArray());
             }
+            catch (Exception ex)
+            {
+                Log.Instance.Logger.Info($"读取字段别名出错{Constants.FieldsAliasXmlFile}:{ex.Message}");
+            }
+
         }
 
 
@@ -90,31 +130,34 @@ namespace BarTriggerPrint.ViewModel
             {
                 if (m_engine == null)
                 {
-                    m_engine = new Engine(true);
+                    try
+                    {
+                        m_engine = new Engine(true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Instance.Logger.Error($"初始化调用bartender出错:{ex.Message}");
+                    }
                 }
                 return m_engine;
             }
         }
 
-
-        private void CreateSampleData()
-        {
-            this.ObsBtwDirs = new ObservableCollection<string>() { "鸡饲料", "鱼饲料", "猪饲料" };
-            this.ObsBtwFiles = new ObservableCollection<string>() { "111", "222", "333", "444", "555", "666", "777", "888", "999" };
-        }
-
         private void ListBtwDirs()
         {
+            Log.Instance.Logger.Info($"开始查找模板,路径{Constants.btwTopDir}");
+
             string[] dirs = Directory.GetDirectories(Constants.btwTopDir);
             this.ObsBtwDirs = new ObservableCollection<string>(dirs);
-
+            Log.Instance.Logger.Info($"结束查找模板，找到品类数量={this.ObsBtwDirs.Count}");
         }
 
         private void ListBtwFilesInDir(string dir)
         {
+            Log.Instance.Logger.Info($"开始查找btw模板,路径{dir}");
             string[] files = Directory.GetFiles(dir, "*.btw");
             this.ObsBtwFiles = new ObservableCollection<string>(files);
-
+            Log.Instance.Logger.Info($"结查找btw模板,找到模板数量={this.ObsBtwFiles.Count}");
         }
 
         private ObservableCollection<string> obsBtwDirs;
@@ -398,6 +441,8 @@ namespace BarTriggerPrint.ViewModel
 
         private LabelFormatDocument SetLabelValues(string file)
         {
+            Log.Instance.Logger.Info($"开始设置标签字段值,文件{file}");
+
             LabelFormatDocument label = this.labelOperator.OpenLabel(file);
             string[] fieldsIn = this.labelOperator.GetLabelFields(file);
             if (this.LabelHasShift)
@@ -420,7 +465,6 @@ namespace BarTriggerPrint.ViewModel
                 {
                     label.SubStrings[field].Value = dateValue;
                     Log.Instance.Logger.Info($"设置{field}={dateValue}");
-
                 }
             }
 
@@ -435,6 +479,7 @@ namespace BarTriggerPrint.ViewModel
                     Log.Instance.Logger.Info($"设置{field}={snValue}");
                 }
             }
+            Log.Instance.Logger.Info($"结束设置标签字段值,文件{file}");
             return label;
         }
 
@@ -442,10 +487,26 @@ namespace BarTriggerPrint.ViewModel
         {
             await Task.Run(() =>
             {
-                LabelFormatDocument label = this.SetLabelValues(this.SelectedBtwFile);
-                string msg = BtwPrintWrapper.PrintBtwFile(label, this.BtEngine);
-                BtwPrintWrapper.PrintPreviewLabel2File(label, this.BtEngine);
-                this.Message = msg.Trim();
+                Log.Instance.Logger.Info($"触发打印!");
+
+                if (!string.IsNullOrWhiteSpace(this.SelectedBtwFile)
+                && File.Exists(this.SelectedBtwFile))
+                {
+                    if (this.BtEngine == null)
+                    {
+                        Log.Instance.Logger.Error($"bartender未正确初始化，无法打印!");
+                        return;
+                    }
+                    Log.Instance.Logger.Info($"准备打印{this.SelectedBtwFile}!");
+                    LabelFormatDocument label = this.SetLabelValues(this.SelectedBtwFile);
+                    string msg = BtwPrintWrapper.PrintBtwFile(label, this.BtEngine);
+                    BtwPrintWrapper.PrintPreviewLabel2File(label, this.BtEngine);
+                    this.Message = msg.Trim();
+                }
+                else
+                {
+                    Log.Instance.Logger.Error($"无法打印，文件不存在：{this.SelectedBtwFile}!");
+                }
             });
         }
 
@@ -459,9 +520,29 @@ namespace BarTriggerPrint.ViewModel
                 if (disposing)
                 {
                     // TODO: 释放托管状态(托管对象)。
-                    if (this.m_engine != null)
-                        this.m_engine.Stop(Seagull.BarTender.Print.SaveOptions.DoNotSaveChanges);
-                    this.m_engine.Dispose();
+                    try
+                    {
+                        if (this.serialPort.IsOpen)
+                            this.serialPort.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Instance.Logger.Error($"关闭串口出现问题:{ex.Message}");
+                    }
+
+
+                    try
+                    {
+                        if (this.m_engine != null)
+                            this.m_engine.Stop(Seagull.BarTender.Print.SaveOptions.DoNotSaveChanges);
+                        this.m_engine.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Instance.Logger.Error($"释放Bartender出现问题:{ex.Message}");
+                    }
+
+
                 }
 
                 // TODO: 释放未托管的资源(未托管的对象)并在以下内容中替代终结器。

@@ -8,16 +8,12 @@ namespace BarTriggerPrint
     public static class Constants
     {
         public const string BarTriggerPrint = "BarTriggerPrint";
-        public const string BarcodeToBeReplaced = "BarcodeToBeReplaced";
-        public const string ZplTemplates = "ZplTemplates";
         public static readonly string AppDataBarTriggerPrintDir = Path.Combine(
             Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"BarTriggerPrint");
-        public static readonly string ZplTemplatesDir = Path.Combine(
-    AppDataBarTriggerPrintDir, ZplTemplates);
         public static readonly string btwTopDir = Path.Combine(AppDataBarTriggerPrintDir, "打印模板");
-        public static readonly string previewDir = 
+        public static readonly string previewDir =
             Path.Combine(AppDataBarTriggerPrintDir, "打印预览");
-        public static readonly string FieldsAliasXmlFile = 
+        public static readonly string FieldsAliasXmlFile =
             Path.Combine(btwTopDir, "字段别名.xml");
         public static readonly Dictionary<int, string> ShiftsIntStrDict =
             new Dictionary<int, string>()
@@ -32,6 +28,7 @@ namespace BarTriggerPrint
         public const string FieldShift = "班次";
         public const string FieldDate = "日期";
         public const string FieldSN = "序列号";
+        public const string SerialPortComName = "COM3";
 
     }
 }
