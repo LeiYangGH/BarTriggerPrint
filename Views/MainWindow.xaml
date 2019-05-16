@@ -67,11 +67,11 @@
         <!--image-->
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition  ></ColumnDefinition>
+                <ColumnDefinition Width="*" ></ColumnDefinition>
                 <ColumnDefinition Width="4"></ColumnDefinition>
-                <ColumnDefinition ></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <ListBox HorizontalAlignment="Stretch"
+            <ListBox  
                 ItemsSource="{Binding ObsBtwDirs, Mode=OneWay}" 
                      SelectedValue="{Binding SelectedBtwDir}">
                 <ListBox.ItemTemplate>
@@ -83,8 +83,8 @@
             <GridSplitter Grid.Column="1" VerticalAlignment="Stretch"  HorizontalAlignment="Center"
                           Width="3"
                           ResizeDirection="Columns"/>
-            <Viewbox Grid.Column="2" HorizontalAlignment="Stretch" >
-                <ListBox  
+            <!--<Viewbox Grid.Column="2" HorizontalAlignment="Stretch" >-->
+            <ListBox  Grid.Column="2" HorizontalAlignment="Stretch"
                      ItemsSource="{Binding ObsBtwFiles}" 
                      SelectedValue="{Binding SelectedBtwFile}"
                      ItemTemplate="{StaticResource templateBtwImage}"
@@ -97,7 +97,7 @@
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                 </ListBox>
-            </Viewbox>
+            <!--</Viewbox>-->
 
 
 
