@@ -42,28 +42,31 @@ namespace BarTriggerPrint.ViewModel
             }
             else
             {
-                this.labelOperator = new LabelOperator(this.BtEngine);
-                //this.CreateSampleData();
-
-                this.ListBtwDirs();
-                this.CreateShifts();
-                this.SelectedDate = DateTime.Today;
-                this.StartingNumberString = "0001";
-                this.ReadFieldsAliasXml();
-                try
-                {
-                    this.serialPort = new SerialPort(Constants.SerialPortComName, 9600);
-                    this.serialPort.DataReceived += SerialPort_DataReceived;
-                    this.serialPort.Open();
-                }
-                catch (Exception ex)
-                {
-                    Log.Instance.Logger.Error($"初始化串口出错{ex.Message}");
-                }
+                Task.Run(() => this.InitComponents());
             }
         }
 
-
+        private void InitComponents()
+        {
+            this.labelOperator = new LabelOperator(this.BtEngine);
+            this.ListBtwDirs();
+            this.CreateShifts();
+            this.ObsPrintHistoryVMs = new ObservableCollection<PrintHistoryViewModel>();
+            this.SelectedDate = DateTime.Today;
+            this.StartingNumberString = "0001";
+            this.ReadFieldsAliasXml();
+            SqliteHistory.CreateDb();
+            try
+            {
+                this.serialPort = new SerialPort(Constants.SerialPortComName, 9600);
+                this.serialPort.DataReceived += SerialPort_DataReceived;
+                this.serialPort.Open();
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Logger.Error($"初始化串口出错{ex.Message}");
+            }
+        }
 
         private static object obj = new object();
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -300,6 +303,24 @@ namespace BarTriggerPrint.ViewModel
             }
         }
 
+        private ObservableCollection<PrintHistoryViewModel> obsPrintHistoryVMs;
+        public ObservableCollection<PrintHistoryViewModel> ObsPrintHistoryVMs
+        {
+            get
+            {
+                return this.obsPrintHistoryVMs;
+            }
+            set
+            {
+                if (this.obsPrintHistoryVMs != value)
+                {
+                    this.obsPrintHistoryVMs = value;
+                    this.RaisePropertyChanged(nameof(ObsPrintHistoryVMs));
+                }
+            }
+        }
+
+
         private ObservableCollection<string> obsBtwFiles;
         public ObservableCollection<string> ObsBtwFiles
         {
@@ -439,10 +460,10 @@ namespace BarTriggerPrint.ViewModel
             }
         }
 
-        private LabelFormatDocument SetLabelValues(string file)
+        private LabelFormatDocument SetLabelValues(string file, out string obarcodeHistroySuffix)
         {
             Log.Instance.Logger.Info($"开始设置标签字段值,文件{file}");
-
+            string barcodeHistroySuffix = "";
             LabelFormatDocument label = this.labelOperator.OpenLabel(file);
             string[] fieldsIn = this.labelOperator.GetLabelFields(file);
             if (this.LabelHasShift)
@@ -455,6 +476,7 @@ namespace BarTriggerPrint.ViewModel
                     label.SubStrings[field].Value = shiftValue;
                     Log.Instance.Logger.Info($"设置{field}={shiftValue}");
                 }
+                barcodeHistroySuffix += shiftValue;
             }
             if (this.LabelHasDate)
             {
@@ -466,6 +488,7 @@ namespace BarTriggerPrint.ViewModel
                     label.SubStrings[field].Value = dateValue;
                     Log.Instance.Logger.Info($"设置{field}={dateValue}");
                 }
+                barcodeHistroySuffix += dateValue;
             }
 
             if (this.LabelHasSN)
@@ -478,8 +501,10 @@ namespace BarTriggerPrint.ViewModel
                     label.SubStrings[field].Value = snValue;
                     Log.Instance.Logger.Info($"设置{field}={snValue}");
                 }
+                barcodeHistroySuffix += snValue;
             }
             Log.Instance.Logger.Info($"结束设置标签字段值,文件{file}");
+            obarcodeHistroySuffix = barcodeHistroySuffix;
             return label;
         }
 
@@ -498,10 +523,30 @@ namespace BarTriggerPrint.ViewModel
                         return;
                     }
                     Log.Instance.Logger.Info($"准备打印{this.SelectedBtwFile}!");
-                    LabelFormatDocument label = this.SetLabelValues(this.SelectedBtwFile);
+#if DEBUG
+                    string obarcodeHistroySuffix;
+                    LabelFormatDocument label =
+                    this.SetLabelValues(this.SelectedBtwFile, out obarcodeHistroySuffix);
+                    string BtwTemplate = this.SelectedBtwFile.Replace(
+                        Constants.btwTopDir, "");
+                    SqliteHistory.InsertPrintHistroy(
+                        BtwTemplate,
+                        obarcodeHistroySuffix);
+                    App.Current.Dispatcher.Invoke((Action)delegate
+                    {
+                        this.ObsPrintHistoryVMs.Add(
+                            new PrintHistoryViewModel(BtwTemplate, obarcodeHistroySuffix,
+                                DateTime.Now.ToString()
+               ));
+                    });
+
+                    this.Message = "DEBUG跳过真实打印";
+
+#else
                     string msg = BtwPrintWrapper.PrintBtwFile(label, this.BtEngine);
                     BtwPrintWrapper.PrintPreviewLabel2File(label, this.BtEngine);
                     this.Message = msg.Trim();
+#endif
                 }
                 else
                 {
