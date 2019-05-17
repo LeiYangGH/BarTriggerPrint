@@ -43,6 +43,7 @@ namespace BarTriggerPrint.ViewModel
             }
             else
             {
+                this.CreateShifts();
                 Task.Run(() => this.InitComponents());
             }
         }
@@ -51,7 +52,6 @@ namespace BarTriggerPrint.ViewModel
         {
             this.labelOperator = new LabelOperator(this.BtEngine);
             this.ListBtwDirs();
-            this.CreateShifts();
             this.ObsPrintHistoryVMs = new ObservableCollection<PrintHistoryViewModel>();
             this.SelectedDate = DateTime.Today;
             this.StartingNumberString = "0001";
@@ -596,7 +596,7 @@ namespace BarTriggerPrint.ViewModel
 
 #else
                     string msg = BtwPrintWrapper.PrintBtwFile(label, this.BtEngine);
-                    BtwPrintWrapper.PrintPreviewLabel2File(label, this.BtEngine);
+                    //BtwPrintWrapper.PrintPreviewLabel2File(label, this.BtEngine);
                     this.Message = msg.Trim();
 #endif
                 }

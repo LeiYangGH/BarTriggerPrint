@@ -4,17 +4,17 @@ using System.Windows.Data;
 
 namespace BarTriggerPrint.Converters
 {
-    [ValueConversion(typeof(string), typeof(bool))]
-    public class SelectedBtw2PrintEnableConverter : IValueConverter
+    [ValueConversion(typeof(string), typeof(string))]
+    public class SelectedBtw2FileNameOExtConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
             if (value is null)
-                return false;
+                return "";
             if (string.IsNullOrWhiteSpace((string)value))
-                return false;
-            return File.Exists((string)value);
+                return "";
+            return Path.GetFileNameWithoutExtension((string)value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,

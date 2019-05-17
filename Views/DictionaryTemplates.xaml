@@ -4,6 +4,10 @@
                     xmlns:vm="clr-namespace:BarTriggerPrint.ViewModel"
                     >
 
+    <DataTemplate x:Key="templateBtw" DataType="string">
+        <TextBlock Text="{Binding .}"></TextBlock>
+    </DataTemplate>
+
     <DataTemplate x:Key="templateBtwImage" DataType="string">
         <Border BorderThickness="2" BorderBrush="LightBlue" Margin="5">
 

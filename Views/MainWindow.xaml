@@ -10,15 +10,16 @@
         mc:Ignorable="d"
         Closing="Window_Closing"
         Title="在线打印系统" Height="450" Width="800"
-        FontSize="16">
+        FontSize="{Binding ElementName=sldCols,Path=Value,Mode=OneWay}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="4"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -64,12 +65,14 @@
                     HorizontalAlignment="Right">打印</Button>
         </StackPanel>
 
-        <!--image-->
+        <!--btw dir file image-->
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" ></ColumnDefinition>
                 <ColumnDefinition Width="4"></ColumnDefinition>
-                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="2*" ></ColumnDefinition>
+                <ColumnDefinition Width="4"></ColumnDefinition>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <ListBox  
                 ItemsSource="{Binding ObsBtwDirs, Mode=OneWay}" 
@@ -81,39 +84,53 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <GridSplitter Grid.Column="1" VerticalAlignment="Stretch"  HorizontalAlignment="Center"
-                          Width="3"
+                          Width="4" Background="LightGray"
                           ResizeDirection="Columns"/>
-            <!--<Viewbox Grid.Column="2" HorizontalAlignment="Stretch" >-->
-            <ListBox  Grid.Column="2" HorizontalAlignment="Stretch"
-                     ItemsSource="{Binding ObsBtwFiles}" 
-                     SelectedValue="{Binding SelectedBtwFile}"
-                     ItemTemplate="{StaticResource templateBtwImage}"
-                     >
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid 
-                                Columns="{Binding ElementName=sldCols,
-                                Path=Value}"></UniformGrid>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                </ListBox>
-            <!--</Viewbox>-->
-
-
-
+            <ListBox  Grid.Column="2"
+                ItemsSource="{Binding ObsBtwFiles, Mode=OneWay}" 
+                     SelectedValue="{Binding SelectedBtwFile}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding ., Converter={StaticResource selbtwf2fnoextc},Mode=OneWay}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <GridSplitter Grid.Column="3" VerticalAlignment="Stretch"  HorizontalAlignment="Center"
+                          Width="4" Background="LightGray"
+                          ResizeDirection="Columns"/>
+            <!--<Viewbox Grid.Column="4"  >
+                
+            </Viewbox>-->
+            <Image    Grid.Column="4"
+               Source="{Binding SelectedBtwFile, Converter={StaticResource btwf2ic},Mode=OneWay}"/>
+           
         </Grid>
-        <Slider  Grid.Row="4"  x:Name="sldCols" Value="4"
-                                Minimum="1" Maximum="5" MinHeight="15"
-                                HorizontalAlignment="Stretch"  VerticalAlignment="Center"
-                                 ></Slider>
-        <Grid Grid.Row="5">
-            <ListBox ItemTemplate="{StaticResource templatePrintHistory}"
+
+        <GridSplitter Grid.Row="4" VerticalAlignment="Center"  HorizontalAlignment="Stretch"
+                          Height="4" Background="LightGray"
+                          ResizeDirection="Rows"/>
+
+        <ListBox Grid.Row="5" ItemTemplate="{StaticResource templatePrintHistory}"
                      ItemsSource="{Binding ObsPrintHistoryVMs}" 
                      VirtualizingPanel.IsVirtualizing="true"
                  HorizontalContentAlignment="Stretch"
                      >
-            </ListBox>
-        </Grid>
+        </ListBox>
+
         <TextBox Grid.Row="6" MaxHeight="50" IsReadOnly="True" Text="{Binding Message,Mode=OneWay}" />
-    </Grid>
+
+
+        <Grid   Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="字体大小" Margin="10,2"></TextBlock>
+            <Slider   x:Name="sldCols" Value="20" Grid.Column="1"
+                                Minimum="8" Maximum="72" MinHeight="15"
+                                HorizontalAlignment="Stretch"  VerticalAlignment="Center"
+                                 ></Slider>
+        </Grid>
+
+     </Grid>
 </Window>
