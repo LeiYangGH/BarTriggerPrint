@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{3254F04A
 		..\BuildAndInstall.ps1 = ..\BuildAndInstall.ps1
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UTValueConvertersTest", "UTValueConvertersTest\UTValueConvertersTest.csproj", "{85287CF2-8137-473B-B723-B064B9776C68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,14 @@ Global
 		{865B66CA-CDD6-4974-888D-F9F4AC99E394}.Release|Any CPU.Build.0 = Release|Any CPU
 		{865B66CA-CDD6-4974-888D-F9F4AC99E394}.Release|x86.ActiveCfg = Release|x86
 		{865B66CA-CDD6-4974-888D-F9F4AC99E394}.Release|x86.Build.0 = Release|x86
+		{85287CF2-8137-473B-B723-B064B9776C68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85287CF2-8137-473B-B723-B064B9776C68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85287CF2-8137-473B-B723-B064B9776C68}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{85287CF2-8137-473B-B723-B064B9776C68}.Debug|x86.Build.0 = Debug|Any CPU
+		{85287CF2-8137-473B-B723-B064B9776C68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85287CF2-8137-473B-B723-B064B9776C68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85287CF2-8137-473B-B723-B064B9776C68}.Release|x86.ActiveCfg = Release|Any CPU
+		{85287CF2-8137-473B-B723-B064B9776C68}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -114,6 +114,7 @@
     <Compile Include="Model\FieldsValueGenerator.cs" />
     <Compile Include="Model\No066Generator.cs" />
     <Compile Include="Model\Shift.cs" />
+    <Compile Include="Model\SimpleConverter.cs" />
     <Compile Include="Model\SqliteHistory.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\PrintHistoryViewModel.cs" />
