@@ -61,9 +61,18 @@ namespace BarTriggerPrint
 
         public bool IsFieldInLabelFile(string checkField, string file)
         {
-            string[] fieldsIn = this.GetLabelFields(file);
-            return fieldsIn.Contains(checkField) ||
-                Constants.FieldsAliasDict[checkField].Any(a => fieldsIn.Contains(a));
+            try
+            {
+                string[] fieldsIn = this.GetLabelFields(file);
+                return fieldsIn.Contains(checkField) ||
+                    Constants.FieldsAliasDict[checkField].Any(a => fieldsIn.Contains(a));
+            }
+            catch (Exception ex)
+            {
+                Log.Instance.Logger.Error($"IsFieldInLabelFile出错{ex.Message}");
+                return false;
+            }
+
         }
     }
 }

@@ -10,7 +10,6 @@ namespace BarTriggerPrint.Model
     {
         public No066Generator() : base("NF前")
         {
-            this.DirName = "NF前";
         }
 
         private string GetYearCharString(int year)

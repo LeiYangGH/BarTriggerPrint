@@ -11,6 +11,11 @@ namespace BarTriggerPrint.Model
         protected string dateFormatString = "yyMMdd";
         protected int sNLength = 4;
 
+
+        public FieldsValueGenerator(string s)
+        {
+
+        }
         public virtual string ConvertToValue<T>(T input) where T : struct
         {
             //if (typeof(T) == typeof(DateTime))

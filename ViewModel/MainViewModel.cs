@@ -50,13 +50,16 @@ namespace BarTriggerPrint.ViewModel
 
         private void InitComponents()
         {
-            this.labelOperator = new LabelOperator(this.BtEngine);
+            if (!Directory.Exists(Constants.btwTopDir))
+                Directory.CreateDirectory(Constants.btwTopDir);
             this.ListBtwDirs();
+
             this.ObsPrintHistoryVMs = new ObservableCollection<PrintHistoryViewModel>();
             this.SelectedDate = DateTime.Today;
             this.StartingNumberString = "0001";
             this.ReadFieldsAliasXml();
             SqliteHistory.CreateDb();
+            this.labelOperator = new LabelOperator(this.BtEngine);
             try
             {
                 this.serialPort = new SerialPort(Constants.SerialPortComName, 9600);
