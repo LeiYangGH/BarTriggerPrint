@@ -107,6 +107,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Converters\BtwDirNameConverter.cs" />
     <Compile Include="Converters\BtwFile2ImageConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\SelectedBtw2FileNameOExtConverter.cs" />
     <Compile Include="Converters\SelectedBtw2PrintEnableConverter.cs" />
     <Compile Include="LabelOperator.cs" />

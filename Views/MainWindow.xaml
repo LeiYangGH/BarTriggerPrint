@@ -25,7 +25,7 @@
 
         <!--输入字段-->
         <Grid Grid.Row="1" ShowGridLines="True" 
-              IsEnabled="{Binding IsListening,Mode=OneWay}">
+              IsEnabled="{Binding IsListening, Converter={StaticResource invboolc}, Mode=OneWay}">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -56,7 +56,7 @@
 
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <TextBlock Margin="10,3">监控检测串口</TextBlock>
+            <TextBlock Margin="10,3" FontWeight="Bold">运行</TextBlock>
             <CheckBox IsChecked="{Binding IsListening, UpdateSourceTrigger=PropertyChanged}"
                       Margin="5,3" VerticalAlignment="Center"
                       ></CheckBox>
@@ -103,7 +103,7 @@
             </Viewbox>-->
             <Image    Grid.Column="4"
                Source="{Binding SelectedBtwFile, Converter={StaticResource btwf2ic},Mode=OneWay}"/>
-           
+
         </Grid>
 
         <GridSplitter Grid.Row="4" VerticalAlignment="Center"  HorizontalAlignment="Stretch"
@@ -132,5 +132,5 @@
                                  ></Slider>
         </Grid>
 
-     </Grid>
+    </Grid>
 </Window>

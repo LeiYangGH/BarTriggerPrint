@@ -18,9 +18,21 @@ namespace BarTriggerPrint
         {
             this.engine = engine;
         }
+
+        public static bool isObjectExistingFile(object o)
+        {
+            if (o == null)
+                return false;
+            if (o.GetType() != typeof(string))
+                return false;
+            string s = (string)o;
+            if (string.IsNullOrWhiteSpace(s))
+                return false;
+            return File.Exists(s);
+        }
         public LabelFormatDocument OpenLabel(string file)
         {
-            if (file != null && File.Exists(file))
+            if (isObjectExistingFile(file))
             {
                 LabelFormatDocument label = null;
 

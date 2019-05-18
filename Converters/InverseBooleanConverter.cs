@@ -1,16 +1,23 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace BarTriggerPrint.Converters
 {
-    [ValueConversion(typeof(string), typeof(bool))]
-    public class SelectedBtw2PrintEnableConverter : IValueConverter
+    [ValueConversion(typeof(bool), typeof(bool))]
+    public class InverseBooleanConverter : IValueConverter
     {
+
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            return LabelOperator.isObjectExistingFile(value);
+            if (targetType != typeof(bool))
+                throw new InvalidOperationException("The target must be a boolean");
+
+            return !(bool)value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,
@@ -18,5 +25,6 @@ namespace BarTriggerPrint.Converters
         {
             throw new NotSupportedException();
         }
+
     }
 }

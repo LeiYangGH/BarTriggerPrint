@@ -30,7 +30,7 @@ namespace BarTriggerPrint.ViewModel
     {
         private Engine m_engine = null;
         private LabelOperator labelOperator;
-        private int currentSN = 0;
+        //private int currentSN = 0;
         private SerialPort serialPort;// = new SerialPort(Constants.SerialPortComName, 9600);
 
         /// <summary>
@@ -102,6 +102,8 @@ namespace BarTriggerPrint.ViewModel
         {
             try
             {
+                Log.Instance.Logger.Info($"开始读取字段别名{Constants.FieldsAliasXmlFile}");
+
                 XElement rules = XElement.Load(Constants.FieldsAliasXmlFile);
                 foreach (var standardName in rules.Elements())
                 {
@@ -109,13 +111,14 @@ namespace BarTriggerPrint.ViewModel
                     foreach (var t2 in standardName.Elements())
                     {
                         t2s.Add(t2.Name.LocalName);
+                        Log.Instance.Logger.Info($"{standardName.Name.LocalName}=>{t2.Name.LocalName}");
                     }
                     Constants.FieldsAliasDict.Add(standardName.Name.LocalName, t2s.ToArray());
                 }
             }
             catch (Exception ex)
             {
-                Log.Instance.Logger.Info($"读取字段别名出错{Constants.FieldsAliasXmlFile}:{ex.Message}");
+                Log.Instance.Logger.Error($"读取字段别名出错{Constants.FieldsAliasXmlFile}:{ex.Message}");
             }
 
         }
@@ -327,7 +330,7 @@ namespace BarTriggerPrint.ViewModel
                 if (this.startingNumber != value)
                 {
                     this.startingNumber = value;
-                    this.currentSN = value;
+                    //this.currentSN = value;
                     this.RaisePropertyChanged(nameof(StartingNumber));
                 }
             }
@@ -402,7 +405,8 @@ namespace BarTriggerPrint.ViewModel
                     this.selectedBtwFile = value;
                     this.RaisePropertyChanged(nameof(SelectedBtwFile));
                     this.SetFieldsEnabled();
-                    if (!string.IsNullOrWhiteSpace(value))
+
+                    if (LabelOperator.isObjectExistingFile(value))
                     {
                         Task.Run(() =>
                         this.LoadPrintHistory(value)
@@ -522,6 +526,8 @@ namespace BarTriggerPrint.ViewModel
             string barcodeHistroySuffix = "";
             LabelFormatDocument label = this.labelOperator.OpenLabel(file);
             string[] fieldsIn = this.labelOperator.GetLabelFields(file);
+            Log.Instance.Logger.Info($"标签包含的字段：{string.Join(",", fieldsIn)}");
+
             if (this.LabelHasShift)
             {
                 string shiftValue = this.SelectedShift;
@@ -534,11 +540,12 @@ namespace BarTriggerPrint.ViewModel
                 }
                 barcodeHistroySuffix += shiftValue;
             }
-            FieldsValueConverter fieldsValueConverter = ValueConverterSelector.SelectByTemplateDir(this.SelectedBtwDir);
+            FieldsValueConverter fieldsValueConverter =
+                ValueConverterSelector.SelectByTemplateDir(this.SelectedBtwDir);
+            Log.Instance.Logger.Info($"转换规则名称{fieldsValueConverter.GetType()}");
 
             if (this.LabelHasDate)
             {
-                //string dateValue = this.SelectedDate.ToString("yyMMdd");
                 string dateValue = fieldsValueConverter.ConvertDate(this.SelectedDate);
                 foreach (string field in fieldsIn.Intersect(
                     Constants.FieldsAliasDict[Constants.FieldDate]
@@ -552,9 +559,9 @@ namespace BarTriggerPrint.ViewModel
 
             if (this.LabelHasSN)
             {
-                string snValue = fieldsValueConverter.ConvertSn(this.currentSN++);
+                this.StartingNumber++;
+                string snValue = fieldsValueConverter.ConvertSn(this.StartingNumber);
 
-                //string snValue = currentSN.ToString().PadLeft(4, '0');
                 foreach (string field in fieldsIn.Intersect(
                     Constants.FieldsAliasDict[Constants.FieldSN]
                     .Union(new string[] { Constants.FieldSN })).Distinct())
@@ -574,9 +581,7 @@ namespace BarTriggerPrint.ViewModel
             await Task.Run(() =>
             {
                 Log.Instance.Logger.Info($"触发打印!");
-
-                if (!string.IsNullOrWhiteSpace(this.SelectedBtwFile)
-                && File.Exists(this.SelectedBtwFile))
+                if (LabelOperator.isObjectExistingFile(this.SelectedBtwFile))
                 {
                     if (this.BtEngine == null)
                     {

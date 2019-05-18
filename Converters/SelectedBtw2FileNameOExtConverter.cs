@@ -10,9 +10,7 @@ namespace BarTriggerPrint.Converters
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            if (value is null)
-                return "";
-            if (string.IsNullOrWhiteSpace((string)value))
+            if (!LabelOperator.isObjectExistingFile(value))
                 return "";
             return Path.GetFileNameWithoutExtension((string)value);
         }
