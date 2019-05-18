@@ -29,7 +29,7 @@ namespace BarTriggerPrint.Views
             mainWin = this;
             this.mainVM = this.DataContext as MainViewModel;
             this.ShowVersion();
-            Log.Instance.Logger.Info("\r\nend of MainWindow()!");
+            Log.Instance.Logger.Debug("\r\nend of MainWindow()!");
         }
 
         private void ShowVersion()
@@ -43,14 +43,14 @@ namespace BarTriggerPrint.Views
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Log.Instance.Logger.Info("\r\nend of Window_Closing()!");
+            Log.Instance.Logger.Debug("\r\nend of Window_Closing()!");
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.T && (Keyboard.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) == (ModifierKeys.Control | ModifierKeys.Shift))
             {
-                Log.Instance.Logger.Info("开始测试!");
+                Log.Instance.Logger.Debug("开始测试!");
                 this.mainVM.TestAllFiles();
             }
         }

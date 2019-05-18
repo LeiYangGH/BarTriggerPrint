@@ -14,11 +14,11 @@ namespace BarTriggerPrint
 
             Messages messages;
             int waitForCompletionTimeout = 10000;
-            Result result = updatedFormat.Print("在线打印系统测试打印", waitForCompletionTimeout, out messages);
-            string messageString = "\n\nMessages:";
+            Result result = updatedFormat.Print("在线打印系统打印", waitForCompletionTimeout, out messages);
+            string messageString = "";
             foreach (Seagull.BarTender.Print.Message message in messages)
             {
-                messageString += "\n\n" + message.Text;
+                messageString += "\r\n" + message.Text;
             }
             return messageString;
         }

@@ -86,7 +86,7 @@ namespace BarTriggerPrint.ViewModel
             byte[] buffer = new byte[bytes];
             this.serialPort.Read(buffer, 0, bytes);
             string bytesString = BitConverter.ToString(buffer);
-            Log.Instance.Logger.Info($"收到串口{Constants.SerialPortComName}数据:{bytesString}.");
+            Log.Instance.Logger.Debug($"收到串口{Constants.SerialPortComName}数据:{bytesString}.");
             this.Message = $"收到串口{Constants.SerialPortComName}数据:{bytesString}.";
             if (bytesString == "01")
             {
@@ -114,7 +114,7 @@ namespace BarTriggerPrint.ViewModel
                     foreach (var t2 in standardName.Elements())
                     {
                         t2s.Add(t2.Name.LocalName);
-                        Log.Instance.Logger.Info($"{standardName.Name.LocalName}=>{t2.Name.LocalName}");
+                        Log.Instance.Logger.Debug($"{standardName.Name.LocalName}=>{t2.Name.LocalName}");
                     }
                     Constants.FieldsAliasDict.Add(standardName.Name.LocalName, t2s.ToArray());
                 }
@@ -302,6 +302,7 @@ namespace BarTriggerPrint.ViewModel
                     this.ListBtwFilesInDir(value);
                     this.fieldsValueConverter =
     ValueConverterSelector.SelectByTemplateDir(this.SelectedBtwDir);
+                    this.Message = $"序列号长度 : {this.fieldsValueConverter.sNLength}";
                     this.StartingNumberMaxLength = this.fieldsValueConverter.sNLength - 1;
                     this.RaisePropertyChanged(nameof(SelectedBtwDir));
                 }

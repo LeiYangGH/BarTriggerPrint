@@ -28,8 +28,7 @@ namespace BarTriggerPrint
         public const string FieldShift = "班次";
         public const string FieldDate = "日期";
         public const string FieldSN = "序列号";
-        public const string SerialPortComName = "COM3";
-        //public const string SqliteDbHistoryName = "barcodehistory";
+        public const string SerialPortComName = "COM2";
         public static readonly string SqliteFileName =
             Path.Combine(AppDataBarTriggerPrintDir, "PrintHistory.db");
 
