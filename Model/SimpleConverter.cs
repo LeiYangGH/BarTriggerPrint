@@ -36,4 +36,12 @@ namespace BarTriggerPrint.Model
 
         }
     }
+
+    public class No465Converter : FieldsValueConverter
+    {
+        public No465Converter() : base("yy/MM/dd", 4)
+        {
+
+        }
+    }
 }

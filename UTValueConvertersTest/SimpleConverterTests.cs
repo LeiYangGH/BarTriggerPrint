@@ -52,5 +52,13 @@ namespace UTValueConvertersTest
             string valueStr = converter.ConvertSn(234);
             Assert.AreEqual(valueStr, "0234");
         }
+
+        [TestMethod]
+        public void TestNo465Converter1()
+        {
+            No465Converter converter = new No465Converter();
+            string valueStr = converter.ConvertDate(new DateTime(2019, 5, 17));
+            Assert.AreEqual(valueStr, "19/05/17");
+        }
     }
 }
