@@ -8,8 +8,18 @@ namespace BarTriggerPrint.Model
 {
     public class SimpleConverter : FieldsValueConverter
     {
-        public SimpleConverter() : base("MMdd", 4)
+        public SimpleConverter(string s, int i) : base(s, i)
         {
         }
     }
+
+    public class No340Converter : FieldsValueConverter
+    {
+        public No340Converter() : base("dd-MM-yy", 7)
+        {
+
+        }
+    }
+
+
 }

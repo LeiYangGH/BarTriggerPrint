@@ -16,11 +16,27 @@ namespace UTValueConvertersTest
         [TestMethod]
         public void TestSimpleConverter()
         {
-            SimpleConverter simpleConverter = new SimpleConverter();
+            SimpleConverter simpleConverter = new SimpleConverter("MMdd", 4);
             string dtStr = simpleConverter.ConvertDate(new DateTime(2019, 5, 17));
             Assert.AreEqual(dtStr, "0517");
         }
 
-       
+        [TestMethod]
+        public void TestNo340Converter1()
+        {
+            No340Converter converter = new No340Converter();
+            string valueStr = converter.ConvertDate(new DateTime(2019, 5, 17));
+            Assert.AreEqual(valueStr, "17-05-19");
+        }
+
+        [TestMethod]
+        public void TestNo340Converter2()
+        {
+            No340Converter converter = new No340Converter();
+            string valueStr = converter.ConvertSn(32543);
+            Assert.AreEqual(valueStr, "0032543");
+        }
+
+
     }
 }

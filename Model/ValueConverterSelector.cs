@@ -14,10 +14,14 @@ namespace BarTriggerPrint.Model
         {
             if (existingFieldsValueConvertersDict.ContainsKey(templateDir))
                 return existingFieldsValueConvertersDict[templateDir];
-            FieldsValueConverter fieldsValueConverter2Create = new SimpleConverter();
+            FieldsValueConverter fieldsValueConverter2Create = new SimpleConverter("yyMMdd", 4);
             if (templateDir.Contains("066"))
             {
                 fieldsValueConverter2Create = new No066Converter();
+            }
+            else if (templateDir.Contains("340"))
+            {
+                fieldsValueConverter2Create = new SimpleConverter("dd-MM-yy", 7);
             }
             existingFieldsValueConvertersDict.Add(templateDir, fieldsValueConverter2Create);
             return fieldsValueConverter2Create;
