@@ -18,7 +18,6 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="4"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
@@ -50,19 +49,21 @@
                         IsEnabled="{Binding LabelHasDate,Mode=OneWay}"
                         SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged}"
                         ></DatePicker>
-            <TextBox Grid.Row="1" Grid.Column="2"  MaxLength="6" 
+            <TextBox Grid.Row="1" Grid.Column="2"  MaxLength="{Binding StartingNumberMaxLength,Mode=OneWay}" 
                      IsEnabled="{Binding LabelHasSN,Mode=OneWay}"
                      Text="{Binding StartingNumber, UpdateSourceTrigger=PropertyChanged}" />
 
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <TextBlock Margin="10,3" FontWeight="Bold">运行</TextBlock>
-            <CheckBox IsChecked="{Binding IsListening, UpdateSourceTrigger=PropertyChanged}"
-                      Margin="5,3" VerticalAlignment="Center"
-                      ></CheckBox>
-            <Button Command="{Binding PrintCommand}"  Margin="20,3"
+            <CheckBox Margin="10,3" FontWeight="Bold" 
+                      IsChecked="{Binding IsListening, UpdateSourceTrigger=PropertyChanged}"
+                      IsEnabled="{Binding SelectedBtwFile,Converter={StaticResource selbtwf2enablec}, Mode=OneWay}"
+                      ToolTip="根据设备检测结果自动打印"
+                      VerticalAlignment="Center"
+                      >运行</CheckBox>
+            <Button Command="{Binding PrintCommand}"  Margin="20,3" ToolTip="补打前请先确保输入序列号等正确"
                     IsEnabled="{Binding SelectedBtwFile,Converter={StaticResource selbtwf2enablec}, Mode=OneWay}"
-                    HorizontalAlignment="Right">打印</Button>
+                    HorizontalAlignment="Right">补打</Button>
         </StackPanel>
 
         <!--btw dir file image-->
@@ -98,9 +99,7 @@
             <GridSplitter Grid.Column="3" VerticalAlignment="Stretch"  HorizontalAlignment="Center"
                           Width="4" Background="LightGray"
                           ResizeDirection="Columns"/>
-            <!--<Viewbox Grid.Column="4"  >
-                
-            </Viewbox>-->
+         
             <Image    Grid.Column="4"
                Source="{Binding SelectedBtwFile, Converter={StaticResource btwf2ic},Mode=OneWay}"/>
 
@@ -110,17 +109,12 @@
                           Height="4" Background="LightGray"
                           ResizeDirection="Rows"/>
 
-        <ListBox Grid.Row="5" ItemTemplate="{StaticResource templatePrintHistory}"
-                     ItemsSource="{Binding ObsPrintHistoryVMs}" 
-                     VirtualizingPanel.IsVirtualizing="true"
-                 HorizontalContentAlignment="Stretch"
-                     >
-        </ListBox>
+       
 
-        <TextBox Grid.Row="6" MaxHeight="50" IsReadOnly="True" Text="{Binding Message,Mode=OneWay}" />
+        <TextBox Grid.Row="5" MinHeight="20"  IsReadOnly="True" Text="{Binding Message,Mode=OneWay}" />
 
 
-        <Grid   Grid.Row="7">
+        <Grid   Grid.Row="6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>

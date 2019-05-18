@@ -32,7 +32,7 @@ namespace BarTriggerPrint.ViewModel
         private LabelOperator labelOperator;
         //private int currentSN = 0;
         private SerialPort serialPort;// = new SerialPort(Constants.SerialPortComName, 9600);
-
+        private FieldsValueConverter fieldsValueConverter;
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -53,7 +53,7 @@ namespace BarTriggerPrint.ViewModel
             if (!Directory.Exists(Constants.btwTopDir))
                 Directory.CreateDirectory(Constants.btwTopDir);
             this.ListBtwDirs();
-
+            this.StartingNumberMaxLength = 7;
             this.ObsPrintHistoryVMs = new ObservableCollection<PrintHistoryViewModel>();
             this.SelectedDate = DateTime.Today;
             this.StartingNumber = 1;
@@ -69,6 +69,7 @@ namespace BarTriggerPrint.ViewModel
             catch (Exception ex)
             {
                 Log.Instance.Logger.Error($"初始化串口出错{ex.Message}");
+                this.Message = $"初始化串口出错{ex.Message}";
             }
         }
 
@@ -123,9 +124,9 @@ namespace BarTriggerPrint.ViewModel
 
         }
 
-
         private void SetFieldsEnabled()
         {
+            this.Message = $"标签内字段：{string.Join(",", this.labelOperator.GetLabelFields(this.SelectedBtwFile))}";
             this.LabelHasShift = this.labelOperator.IsFieldInLabelFile(Constants.FieldShift, this.SelectedBtwFile);
             this.LabelHasDate = this.labelOperator.IsFieldInLabelFile(Constants.FieldDate, this.SelectedBtwFile);
             this.LabelHasSN = this.labelOperator.IsFieldInLabelFile(Constants.FieldSN, this.SelectedBtwFile);
@@ -155,6 +156,7 @@ namespace BarTriggerPrint.ViewModel
                     catch (Exception ex)
                     {
                         Log.Instance.Logger.Error($"初始化调用bartender出错:{ex.Message}");
+                        this.Message = $"初始化调用bartender出错:{ex.Message}";
                     }
                 }
                 return m_engine;
@@ -296,6 +298,9 @@ namespace BarTriggerPrint.ViewModel
                 {
                     this.selectedBtwDir = value;
                     this.ListBtwFilesInDir(value);
+                    this.fieldsValueConverter =
+    ValueConverterSelector.SelectByTemplateDir(this.SelectedBtwDir);
+                    this.StartingNumberMaxLength = this.fieldsValueConverter.sNLength - 1;
                     this.RaisePropertyChanged(nameof(SelectedBtwDir));
                 }
             }
@@ -330,8 +335,25 @@ namespace BarTriggerPrint.ViewModel
                 if (this.startingNumber != value)
                 {
                     this.startingNumber = value;
-                    //this.currentSN = value;
                     this.RaisePropertyChanged(nameof(StartingNumber));
+                }
+            }
+        }
+
+
+        private int startingNumberMaxLength;
+        public int StartingNumberMaxLength
+        {
+            get
+            {
+                return this.startingNumberMaxLength;
+            }
+            set
+            {
+                if (this.startingNumberMaxLength != value)
+                {
+                    this.startingNumberMaxLength = value;
+                    this.RaisePropertyChanged(nameof(StartingNumberMaxLength));
                 }
             }
         }
@@ -404,36 +426,10 @@ namespace BarTriggerPrint.ViewModel
                 {
                     this.selectedBtwFile = value;
                     this.RaisePropertyChanged(nameof(SelectedBtwFile));
-                    this.SetFieldsEnabled();
 
-                    if (LabelOperator.isObjectExistingFile(value))
-                    {
-                        Task.Run(() =>
-                        this.LoadPrintHistory(value)
-                        );
-                    }
+                    this.SetFieldsEnabled();
                 }
             }
-        }
-
-
-        private void LoadPrintHistory(string file)
-        {
-
-            string BtwTemplate = this.SelectedBtwFile.Replace(
-                      Constants.btwTopDir, "");
-
-            DataTable dt = SqliteHistory.QueryRecent(BtwTemplate, 1000);
-            this.ObsPrintHistoryVMs = new ObservableCollection<PrintHistoryViewModel>(
-                dt.Rows.OfType<DataRow>()
-                .Select(r => new PrintHistoryViewModel(
-                    BtwTemplate,
-                    r[0].ToString(),
-                    r[1].ToString()
-                    ))
-                );
-
-
         }
 
         private bool isExporting;
@@ -527,7 +523,7 @@ namespace BarTriggerPrint.ViewModel
             LabelFormatDocument label = this.labelOperator.OpenLabel(file);
             string[] fieldsIn = this.labelOperator.GetLabelFields(file);
             Log.Instance.Logger.Info($"标签包含的字段：{string.Join(",", fieldsIn)}");
-
+            this.Message = $"标签包含的字段：{string.Join(",", fieldsIn)}";
             if (this.LabelHasShift)
             {
                 string shiftValue = this.SelectedShift;
@@ -540,13 +536,12 @@ namespace BarTriggerPrint.ViewModel
                 }
                 barcodeHistroySuffix += shiftValue;
             }
-            FieldsValueConverter fieldsValueConverter =
-                ValueConverterSelector.SelectByTemplateDir(this.SelectedBtwDir);
+
             Log.Instance.Logger.Info($"转换规则名称{fieldsValueConverter.GetType()}");
 
             if (this.LabelHasDate)
             {
-                string dateValue = fieldsValueConverter.ConvertDate(this.SelectedDate);
+                string dateValue = this.fieldsValueConverter.ConvertDate(this.SelectedDate);
                 foreach (string field in fieldsIn.Intersect(
                     Constants.FieldsAliasDict[Constants.FieldDate]
                     .Union(new string[] { Constants.FieldDate })).Distinct())
@@ -560,7 +555,7 @@ namespace BarTriggerPrint.ViewModel
             if (this.LabelHasSN)
             {
                 this.StartingNumber++;
-                string snValue = fieldsValueConverter.ConvertSn(this.StartingNumber);
+                string snValue = this.fieldsValueConverter.ConvertSn(this.StartingNumber);
 
                 foreach (string field in fieldsIn.Intersect(
                     Constants.FieldsAliasDict[Constants.FieldSN]
@@ -598,13 +593,6 @@ namespace BarTriggerPrint.ViewModel
                     SqliteHistory.InsertPrintHistroy(
                         BtwTemplate,
                         obarcodeHistroySuffix);
-                    App.Current.Dispatcher.Invoke((Action)delegate
-                    {
-                        this.ObsPrintHistoryVMs.Add(
-                            new PrintHistoryViewModel(BtwTemplate, obarcodeHistroySuffix,
-                                DateTime.Now.ToString()
-               ));
-                    });
 #if DEBUG
                     this.Message = "DEBUG跳过真实打印";
 

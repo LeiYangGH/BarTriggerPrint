@@ -9,8 +9,9 @@ namespace BarTriggerPrint.Model
     public abstract class FieldsValueConverter
     {
         protected string dateFormatString = "yyMMdd";
-        protected int sNLength = 4;
+        //protected int sNLength = 4;
 
+        public int sNLength { get; protected set; }
         public FieldsValueConverter(string dateFormatString, int sNLength)
         {
             this.dateFormatString = dateFormatString;
