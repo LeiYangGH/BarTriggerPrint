@@ -113,6 +113,7 @@
     <Compile Include="Log.cs" />
     <Compile Include="Model\FieldsValueConverter.cs" />
     <Compile Include="Model\No066Converter.cs" />
+    <Compile Include="Model\No386Converter.cs" />
     <Compile Include="Model\Shift.cs" />
     <Compile Include="Model\SimpleConverter.cs" />
     <Compile Include="Model\SqliteHistory.cs" />
