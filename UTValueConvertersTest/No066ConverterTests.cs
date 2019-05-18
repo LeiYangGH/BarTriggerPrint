@@ -162,35 +162,35 @@ namespace UTValueConvertersTest
         public void TestConvertDateTime1()
         {
             DateTime dt = new DateTime(2019, 5, 18);
-            Assert.AreEqual("95H", convert.ConvertToValue<DateTime>(dt));
+            Assert.AreEqual("95H", convert.ConvertDate(dt));
         }
 
         [TestMethod]
         public void TestConvertDateTime2()
         {
             DateTime dt = new DateTime(2017, 11, 13);
-            Assert.AreEqual("7BC", convert.ConvertToValue<DateTime>(dt));
+            Assert.AreEqual("7BC", convert.ConvertDate(dt));
         }
 
         [TestMethod]
         public void TestConvertSn1()
         {
-            Assert.AreEqual("001", convert.ConvertToValue<int>(1));
+            Assert.AreEqual("001", convert.ConvertSn(1));
         }
         [TestMethod]
         public void TestConvertSn2()
         {
-            Assert.AreEqual("009", convert.ConvertToValue<int>(9));
+            Assert.AreEqual("009", convert.ConvertSn(9));
         }
         [TestMethod]
         public void TestConvertSn3()
         {
-            Assert.AreEqual("099", convert.ConvertToValue<int>(99));
+            Assert.AreEqual("099", convert.ConvertSn(99));
         }
         [TestMethod]
         public void TestConvertSn4()
         {
-            Assert.AreEqual("999", convert.ConvertToValue<int>(999));
+            Assert.AreEqual("999", convert.ConvertSn(999));
         }
     }
 }

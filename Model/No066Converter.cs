@@ -8,12 +8,11 @@ namespace BarTriggerPrint.Model
 {
     public class No066Converter : FieldsValueConverter
     {
-        public No066Converter() : base("NF前")
+        public No066Converter() : base("", 3)
         {
-            this.sNLength = 3;
         }
 
-        protected override string ConvertDate(DateTime dt)
+        public override string ConvertDate(DateTime dt)
         {
             string ys = this.GetYearCharString(dt.Year);
             string ms = this.GetMonthCharString(dt.Month);

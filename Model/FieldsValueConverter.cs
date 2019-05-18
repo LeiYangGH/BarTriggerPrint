@@ -11,35 +11,18 @@ namespace BarTriggerPrint.Model
         protected string dateFormatString = "yyMMdd";
         protected int sNLength = 4;
 
-
-        public FieldsValueConverter(string s)
+        public FieldsValueConverter(string dateFormatString, int sNLength)
         {
-
-        }
-        public virtual string ConvertToValue<T>(T input) where T : struct
-        {
-            //if (typeof(T) == typeof(DateTime))
-            if (input is DateTime)
-            {
-                DateTime dt = (DateTime)Convert.ChangeType(input, typeof(DateTime));
-                return this.ConvertDate(dt);
-            }
-            else if (input is int)
-            {
-                int dt = (int)Convert.ChangeType(input, typeof(int));
-                return this.ConvertSn(dt);
-            }
-            else
-                return "WRONGTYPE";
+            this.dateFormatString = dateFormatString;
+            this.sNLength = sNLength;
         }
 
-
-        protected virtual string ConvertDate(DateTime dt)
+        public virtual string ConvertDate(DateTime dt)
         {
             return dt.ToString(this.dateFormatString);
         }
 
-        protected virtual string ConvertSn(int num)
+        public virtual string ConvertSn(int num)
         {
             int toMod = (int)Math.Floor(Math.Pow(10, this.sNLength));
             return (num % toMod).ToString().PadLeft(this.sNLength, '0');

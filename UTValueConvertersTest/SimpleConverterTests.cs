@@ -17,10 +17,10 @@ namespace UTValueConvertersTest
         public void TestSimpleConverter()
         {
             SimpleConverter simpleConverter = new SimpleConverter();
-            string dtStr = simpleConverter.ConvertToValue<DateTime>(new DateTime(2019, 5, 17));
+            string dtStr = simpleConverter.ConvertDate(new DateTime(2019, 5, 17));
             Assert.AreEqual(dtStr, "0517");
         }
 
-        
+       
     }
 }

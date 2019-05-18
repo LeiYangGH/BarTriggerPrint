@@ -8,10 +8,8 @@ namespace BarTriggerPrint.Model
 {
     public class SimpleConverter : FieldsValueConverter
     {
-        public SimpleConverter() : base("")
+        public SimpleConverter() : base("MMdd", 4)
         {
-            this.dateFormatString = "MMdd";
-            this.sNLength = 3;
         }
     }
 }
