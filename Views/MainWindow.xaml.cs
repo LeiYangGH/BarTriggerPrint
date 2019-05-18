@@ -43,6 +43,8 @@ namespace BarTriggerPrint.Views
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (mainVM != null)
+                mainVM.Dispose();
             Log.Instance.Logger.Debug("\r\nend of Window_Closing()!");
         }
 

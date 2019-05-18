@@ -23,6 +23,7 @@ namespace BarTriggerPrint.Model
 
     public class No460Converter : FieldsValueConverter
     {
+        //yy/MM?
         public No460Converter() : base("yyMM", 7)
         {
 

@@ -32,24 +32,25 @@
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition ></ColumnDefinition>
-                <ColumnDefinition IsEnabled="False"></ColumnDefinition>
+                <ColumnDefinition ></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0" HorizontalAlignment="Center">班次</TextBlock>
             <TextBlock Grid.Column="1" HorizontalAlignment="Center">日期</TextBlock>
-            <TextBlock Grid.Column="2" HorizontalAlignment="Center">起始序号</TextBlock>
+            <TextBlock Grid.Column="2" HorizontalAlignment="Center">序列号</TextBlock>
             <ComboBox Grid.Row="1" Grid.Column="0" 
-                        IsEnabled="{Binding LabelHasShift, Mode=OneWay}"
+                        IsEnabled="{Binding LabelHasShift, Mode=OneWay}" MaxWidth="200"
                       ItemsSource="{Binding ObsShifts, Mode=OneTime}"
                       SelectedValue="{Binding SelectedShift,Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                       SelectedValuePath="ShiftValue"
-                      DisplayMemberPath="ShiftName"
+                      DisplayMemberPath="ShiftName" HorizontalContentAlignment="Center"
                       ></ComboBox>
-            <DatePicker Grid.Row="1" Grid.Column="1" 
+            <DatePicker Grid.Row="1" Grid.Column="1" MaxWidth="200" HorizontalAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding LabelHasDate,Mode=OneWay}"
                         SelectedDate="{Binding SelectedDate,UpdateSourceTrigger=PropertyChanged}"
                         ></DatePicker>
             <TextBox Grid.Row="1" Grid.Column="2"  MaxLength="{Binding StartingNumberMaxLength,Mode=OneWay}" 
+                     MaxWidth="200"
                      IsEnabled="{Binding LabelHasSN,Mode=OneWay}"
                      Text="{Binding StartingNumber, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -59,7 +60,7 @@
                       IsChecked="{Binding IsListening, UpdateSourceTrigger=PropertyChanged}"
                       IsEnabled="{Binding SelectedBtwFile,Converter={StaticResource selbtwf2enablec}, Mode=OneWay}"
                       ToolTip="根据设备检测结果自动打印"
-                      VerticalAlignment="Center"
+                      VerticalAlignment="Center" VerticalContentAlignment="Center"
                       >运行</CheckBox>
             <Button Command="{Binding PrintCommand}"  Margin="20,3" ToolTip="打印前请先确保正确输入，如序列号等"
                     IsEnabled="{Binding SelectedBtwFile,Converter={StaticResource selbtwf2enablec}, Mode=OneWay}"
@@ -67,41 +68,44 @@
         </StackPanel>
 
         <!--btw dir file image-->
-        <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" ></ColumnDefinition>
-                <ColumnDefinition Width="4"></ColumnDefinition>
-                <ColumnDefinition Width="2*" ></ColumnDefinition>
-                <ColumnDefinition Width="4"></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <ListBox  
+        <Border Grid.Row="3" BorderBrush="LightBlue" BorderThickness="1" Padding="1">
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" ></ColumnDefinition>
+                    <ColumnDefinition Width="4"></ColumnDefinition>
+                    <ColumnDefinition Width="2*" ></ColumnDefinition>
+                    <ColumnDefinition Width="4"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ListBox  
                 ItemsSource="{Binding ObsBtwDirs, Mode=OneWay}" 
                      SelectedValue="{Binding SelectedBtwDir}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding ., Converter={StaticResource btwdirc},Mode=OneWay}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch"  HorizontalAlignment="Center" ResizeDirection="Columns"/>
-            <ListBox  Grid.Column="2"
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ., Converter={StaticResource btwdirc},Mode=OneWay}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <GridSplitter Grid.Column="1" Width="4" VerticalAlignment="Stretch"  HorizontalAlignment="Center" ResizeDirection="Columns"/>
+                <ListBox  Grid.Column="2"
                 ItemsSource="{Binding ObsBtwFiles, Mode=OneWay}" 
                      SelectedValue="{Binding SelectedBtwFile}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding ., Converter={StaticResource selbtwf2fnoextc},Mode=OneWay}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <GridSplitter Grid.Column="3" VerticalAlignment="Stretch"  HorizontalAlignment="Center"
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding ., Converter={StaticResource selbtwf2fnoextc},Mode=OneWay}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <GridSplitter Grid.Column="3" VerticalAlignment="Stretch"  HorizontalAlignment="Center"
                           Width="4" Background="LightGray" ResizeDirection="Columns"/>
 
-            <Image    Grid.Column="4"
+                <Image    Grid.Column="4"
                Source="{Binding SelectedBtwFile, Converter={StaticResource btwf2ic},Mode=OneWay}"
                       />
 
-        </Grid>
+            </Grid>
+        </Border>
+
 
         <GridSplitter Grid.Row="4" VerticalAlignment="Center"  HorizontalAlignment="Stretch"
                           Height="4" Background="LightGray" ResizeDirection="Rows"/>

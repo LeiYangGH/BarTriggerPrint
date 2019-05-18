@@ -23,12 +23,15 @@ namespace BarTriggerPrint
         {
             if (o == null)
                 return false;
-            if (o.GetType() != typeof(string))
+            else if (o.GetType() != typeof(string))
                 return false;
-            string s = (string)o;
-            if (string.IsNullOrWhiteSpace(s))
-                return false;
-            return File.Exists(s);
+            else
+            {
+                string s = (string)o;
+                if (string.IsNullOrWhiteSpace(s))
+                    return false;
+                return File.Exists(s);
+            }
         }
         public LabelFormatDocument OpenLabel(string file)
         {

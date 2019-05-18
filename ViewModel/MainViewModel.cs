@@ -579,6 +579,11 @@ namespace BarTriggerPrint.ViewModel
             await Task.Run(() =>
             {
                 Log.Instance.Logger.Info($"触发打印!");
+                if (this.SelectedBtwFile == null)
+                {
+                    Log.Instance.Logger.Error($"未选择任何文件，退出打印!");
+                    return;
+                }
                 if (LabelOperator.isObjectExistingFile(this.SelectedBtwFile))
                 {
                     if (this.BtEngine == null)
@@ -591,6 +596,11 @@ namespace BarTriggerPrint.ViewModel
                     string obarcodeHistroySuffix;
                     LabelFormatDocument label =
                     this.SetLabelValues(this.SelectedBtwFile, out obarcodeHistroySuffix);
+                    if (this.SelectedBtwFile == null)
+                    {
+                        Log.Instance.Logger.Error($"未选择任何文件，退出打印!");
+                        return;
+                    }
                     string BtwTemplate = this.SelectedBtwFile.Replace(
                         Constants.btwTopDir, "");
                     SqliteHistory.InsertPrintHistroy(
@@ -661,8 +671,11 @@ namespace BarTriggerPrint.ViewModel
                     try
                     {
                         if (this.m_engine != null)
+                        {
                             this.m_engine.Stop(Seagull.BarTender.Print.SaveOptions.DoNotSaveChanges);
-                        this.m_engine.Dispose();
+                            this.m_engine.Dispose();
+                        }
+
                     }
                     catch (Exception ex)
                     {
