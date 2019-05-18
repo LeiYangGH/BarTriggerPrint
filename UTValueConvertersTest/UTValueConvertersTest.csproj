@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="No460ConverterTests.cs" />
     <Compile Include="No066ConverterTests.cs" />
     <Compile Include="No386ConverterTests.cs" />
     <Compile Include="SimpleConverterTests.cs" />
