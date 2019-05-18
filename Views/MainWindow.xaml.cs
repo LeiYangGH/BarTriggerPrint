@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BarTriggerPrint.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,13 @@ namespace BarTriggerPrint.Views
     /// </summary>
     public partial class MainWindow : Window
     {
+        private MainViewModel mainVM;
+        public static MainWindow mainWin;
         public MainWindow()
         {
             InitializeComponent();
+            mainWin = this;
+            this.mainVM = this.DataContext as MainViewModel;
             this.ShowVersion();
             Log.Instance.Logger.Info("\r\nend of MainWindow()!");
         }
@@ -39,6 +44,15 @@ namespace BarTriggerPrint.Views
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Log.Instance.Logger.Info("\r\nend of Window_Closing()!");
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.T && (Keyboard.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) == (ModifierKeys.Control | ModifierKeys.Shift))
+            {
+                Log.Instance.Logger.Info("开始测试!");
+                this.mainVM.TestAllFiles();
+            }
         }
     }
 }

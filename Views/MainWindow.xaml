@@ -10,7 +10,8 @@
         mc:Ignorable="d"
         Closing="Window_Closing"
         Title="在线打印系统" Height="450" Width="800"
-        FontSize="{Binding ElementName=sldCols,Path=Value,Mode=OneWay}">
+        FontSize="{Binding ElementName=sldCols,Path=Value,Mode=OneWay}"
+        KeyDown="Window_KeyDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -40,14 +41,13 @@
             <ComboBox Grid.Row="1" Grid.Column="0" 
                         IsEnabled="{Binding LabelHasShift, Mode=OneWay}"
                       ItemsSource="{Binding ObsShifts, Mode=OneTime}"
-                      SelectedValue="{Binding SelectedShift,Mode=OneWayToSource,
-                UpdateSourceTrigger=PropertyChanged}"
+                      SelectedValue="{Binding SelectedShift,Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                       SelectedValuePath="ShiftValue"
                       DisplayMemberPath="ShiftName"
                       ></ComboBox>
             <DatePicker Grid.Row="1" Grid.Column="1" 
                         IsEnabled="{Binding LabelHasDate,Mode=OneWay}"
-                        SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedDate="{Binding SelectedDate,UpdateSourceTrigger=PropertyChanged}"
                         ></DatePicker>
             <TextBox Grid.Row="1" Grid.Column="2"  MaxLength="{Binding StartingNumberMaxLength,Mode=OneWay}" 
                      IsEnabled="{Binding LabelHasSN,Mode=OneWay}"
@@ -61,7 +61,7 @@
                       ToolTip="根据设备检测结果自动打印"
                       VerticalAlignment="Center"
                       >运行</CheckBox>
-            <Button Command="{Binding PrintCommand}"  Margin="20,3" ToolTip="补打前请先确保输入序列号等正确"
+            <Button Command="{Binding PrintCommand}"  Margin="20,3" ToolTip="打印前请先确保正确输入，如序列号等"
                     IsEnabled="{Binding SelectedBtwFile,Converter={StaticResource selbtwf2enablec}, Mode=OneWay}"
                     HorizontalAlignment="Right">补打</Button>
         </StackPanel>
@@ -84,9 +84,7 @@
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch"  HorizontalAlignment="Center"
-                          Width="4" Background="LightGray"
-                          ResizeDirection="Columns"/>
+            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch"  HorizontalAlignment="Center" ResizeDirection="Columns"/>
             <ListBox  Grid.Column="2"
                 ItemsSource="{Binding ObsBtwFiles, Mode=OneWay}" 
                      SelectedValue="{Binding SelectedBtwFile}">
@@ -97,19 +95,18 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <GridSplitter Grid.Column="3" VerticalAlignment="Stretch"  HorizontalAlignment="Center"
-                          Width="4" Background="LightGray"
-                          ResizeDirection="Columns"/>
-         
+                          Width="4" Background="LightGray" ResizeDirection="Columns"/>
+
             <Image    Grid.Column="4"
-               Source="{Binding SelectedBtwFile, Converter={StaticResource btwf2ic},Mode=OneWay}"/>
+               Source="{Binding SelectedBtwFile, Converter={StaticResource btwf2ic},Mode=OneWay}"
+                      />
 
         </Grid>
 
         <GridSplitter Grid.Row="4" VerticalAlignment="Center"  HorizontalAlignment="Stretch"
-                          Height="4" Background="LightGray"
-                          ResizeDirection="Rows"/>
+                          Height="4" Background="LightGray" ResizeDirection="Rows"/>
 
-       
+
 
         <TextBox Grid.Row="5" MinHeight="20"  IsReadOnly="True" Text="{Binding Message,Mode=OneWay}" />
 

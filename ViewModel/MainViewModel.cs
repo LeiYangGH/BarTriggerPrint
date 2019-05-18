@@ -1,15 +1,17 @@
 using BarTriggerPrint.Model;
+using BarTriggerPrint.Views;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Seagull.BarTender.Print;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Windows.Threading;
 using System.Xml.Linq;
 
 namespace BarTriggerPrint.ViewModel
@@ -607,6 +609,31 @@ namespace BarTriggerPrint.ViewModel
                     Log.Instance.Logger.Error($"无法打印，文件不存在：{this.SelectedBtwFile}!");
                 }
             });
+        }
+
+        private static Action EmptyDelegate = delegate () { };
+        public void TestAllFiles()
+        {
+            this.Message = "开始测试";
+            MainWindow MainWin = (MainWindow)System.Windows.Application.Current.MainWindow;
+            MainWin.Background = new SolidColorBrush(Colors.Red);
+            MainWin.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
+            foreach (string dir in this.ObsBtwDirs)
+            {
+                Log.Instance.Logger.Info($"开始测试品类：{dir}!");
+                this.SelectedBtwDir = dir;
+                MainWin.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
+                foreach (string file in this.ObsBtwFiles)
+                {
+                    Log.Instance.Logger.Info($"开始测试标签：{file}!");
+                    this.SelectedBtwFile = file;
+                    MainWin.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
+                    this.Print();
+                }
+
+            }
+            MainWin.Background = new SolidColorBrush(Colors.Green);
+
         }
 
         #region IDisposable Support
