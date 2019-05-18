@@ -111,8 +111,8 @@
     <Compile Include="Converters\SelectedBtw2PrintEnableConverter.cs" />
     <Compile Include="LabelOperator.cs" />
     <Compile Include="Log.cs" />
-    <Compile Include="Model\FieldsValueGenerator.cs" />
-    <Compile Include="Model\No066Generator.cs" />
+    <Compile Include="Model\FieldsValueConverter.cs" />
+    <Compile Include="Model\No066Converter.cs" />
     <Compile Include="Model\Shift.cs" />
     <Compile Include="Model\SimpleConverter.cs" />
     <Compile Include="Model\SqliteHistory.cs" />

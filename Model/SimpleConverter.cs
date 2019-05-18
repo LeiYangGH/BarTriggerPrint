@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BarTriggerPrint.Model
 {
-    public class SimpleConverter : FieldsValueGenerator
+    public class SimpleConverter : FieldsValueConverter
     {
         public SimpleConverter() : base("")
         {

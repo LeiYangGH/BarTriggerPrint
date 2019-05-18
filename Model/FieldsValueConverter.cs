@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace BarTriggerPrint.Model
 {
-    public abstract class FieldsValueGenerator
+    public abstract class FieldsValueConverter
     {
         protected string dateFormatString = "yyMMdd";
         protected int sNLength = 4;
 
 
-        public FieldsValueGenerator(string s)
+        public FieldsValueConverter(string s)
         {
 
         }
