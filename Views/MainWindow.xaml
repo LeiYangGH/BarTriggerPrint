@@ -50,9 +50,9 @@
                         IsEnabled="{Binding LabelHasDate,Mode=OneWay}"
                         SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged}"
                         ></DatePicker>
-            <TextBox Grid.Row="1" Grid.Column="2"  
+            <TextBox Grid.Row="1" Grid.Column="2"  MaxLength="6" 
                      IsEnabled="{Binding LabelHasSN,Mode=OneWay}"
-                     Text="{Binding StartingNumberString, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding StartingNumber, UpdateSourceTrigger=PropertyChanged}" />
 
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Horizontal">

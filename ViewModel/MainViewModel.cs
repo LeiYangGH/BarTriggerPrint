@@ -30,7 +30,7 @@ namespace BarTriggerPrint.ViewModel
     {
         private Engine m_engine = null;
         private LabelOperator labelOperator;
-        private static int currentSN = 0;
+        private int currentSN = 0;
         private SerialPort serialPort;// = new SerialPort(Constants.SerialPortComName, 9600);
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace BarTriggerPrint.ViewModel
 
             this.ObsPrintHistoryVMs = new ObservableCollection<PrintHistoryViewModel>();
             this.SelectedDate = DateTime.Today;
-            this.StartingNumberString = "0001";
+            this.StartingNumber = 1;
             this.ReadFieldsAliasXml();
             SqliteHistory.CreateDb();
             this.labelOperator = new LabelOperator(this.BtEngine);
@@ -315,19 +315,20 @@ namespace BarTriggerPrint.ViewModel
             }
         }
 
-        private string startingNumberString;
-        public string StartingNumberString
+        private int startingNumber;
+        public int StartingNumber
         {
             get
             {
-                return this.startingNumberString;
+                return this.startingNumber;
             }
             set
             {
-                if (this.startingNumberString != value)
+                if (this.startingNumber != value)
                 {
-                    this.startingNumberString = value;
-                    this.RaisePropertyChanged(nameof(StartingNumberString));
+                    this.startingNumber = value;
+                    this.currentSN = value;
+                    this.RaisePropertyChanged(nameof(StartingNumber));
                 }
             }
         }
@@ -533,9 +534,12 @@ namespace BarTriggerPrint.ViewModel
                 }
                 barcodeHistroySuffix += shiftValue;
             }
+            FieldsValueConverter fieldsValueConverter = ValueConverterSelector.SelectByTemplateDir(this.SelectedBtwDir);
+
             if (this.LabelHasDate)
             {
-                string dateValue = this.SelectedDate.ToString("yyMMdd");
+                //string dateValue = this.SelectedDate.ToString("yyMMdd");
+                string dateValue = fieldsValueConverter.ConvertDate(this.SelectedDate);
                 foreach (string field in fieldsIn.Intersect(
                     Constants.FieldsAliasDict[Constants.FieldDate]
                     .Union(new string[] { Constants.FieldDate })).Distinct())
@@ -548,7 +552,9 @@ namespace BarTriggerPrint.ViewModel
 
             if (this.LabelHasSN)
             {
-                string snValue = currentSN.ToString().PadLeft(4, '0');
+                string snValue = fieldsValueConverter.ConvertSn(this.currentSN++);
+
+                //string snValue = currentSN.ToString().PadLeft(4, '0');
                 foreach (string field in fieldsIn.Intersect(
                     Constants.FieldsAliasDict[Constants.FieldSN]
                     .Union(new string[] { Constants.FieldSN })).Distinct())

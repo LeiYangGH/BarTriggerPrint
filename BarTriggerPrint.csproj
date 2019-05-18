@@ -116,6 +116,7 @@
     <Compile Include="Model\Shift.cs" />
     <Compile Include="Model\SimpleConverter.cs" />
     <Compile Include="Model\SqliteHistory.cs" />
+    <Compile Include="Model\ValueConverterSelector.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\PrintHistoryViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
