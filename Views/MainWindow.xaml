@@ -9,7 +9,7 @@
         
         mc:Ignorable="d"
         Closing="Window_Closing"
-        Title="在线打印系统" Height="450" Width="800"
+        Title="在线打印系统" Height="450" Width="800" WindowState="Maximized" WindowStartupLocation="CenterScreen"
         FontSize="{Binding ElementName=sldCols,Path=Value,Mode=OneWay}"
         KeyDown="Window_KeyDown">
     <Grid>
@@ -18,7 +18,6 @@
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
-            <RowDefinition Height="4"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="auto"></RowDefinition>
         </Grid.RowDefinitions>
@@ -106,23 +105,17 @@
             </Grid>
         </Border>
 
-
-        <GridSplitter Grid.Row="4" VerticalAlignment="Center"  HorizontalAlignment="Stretch"
-                          Height="4" Background="LightGray" ResizeDirection="Rows"/>
+        <TextBox Grid.Row="4" MinHeight="20" MaxHeight="70" IsReadOnly="True" Text="{Binding Message,Mode=OneWay}" />
 
 
-
-        <TextBox Grid.Row="5" MinHeight="20"  IsReadOnly="True" Text="{Binding Message,Mode=OneWay}" />
-
-
-        <Grid   Grid.Row="6">
+        <Grid   Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="字体大小" Margin="10,2"></TextBlock>
             <Slider   x:Name="sldCols" Value="20" Grid.Column="1"
-                                Minimum="8" Maximum="72" MinHeight="15"
+                                Minimum="8" Maximum="72" MinHeight="15" MaxHeight="70"
                                 HorizontalAlignment="Stretch"  VerticalAlignment="Center"
                                  ></Slider>
         </Grid>
