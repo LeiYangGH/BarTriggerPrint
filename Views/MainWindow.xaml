@@ -68,7 +68,7 @@
 
         <!--btw dir file image-->
         <Border Grid.Row="3" BorderBrush="LightBlue" BorderThickness="1" Padding="1">
-            <Grid >
+            <Grid IsEnabled="{Binding IsListening, Converter={StaticResource invboolc}, Mode=OneWay}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" ></ColumnDefinition>
                     <ColumnDefinition Width="4"></ColumnDefinition>

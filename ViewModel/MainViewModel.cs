@@ -303,7 +303,7 @@ namespace BarTriggerPrint.ViewModel
                     this.fieldsValueConverter =
     ValueConverterSelector.SelectByTemplateDir(this.SelectedBtwDir);
                     this.Message = $"–Ú¡–∫≈≥§∂» : {this.fieldsValueConverter.sNLength}";
-                    this.StartingNumberMaxLength = this.fieldsValueConverter.sNLength - 1;
+                    this.StartingNumberMaxLength = this.fieldsValueConverter.sNLength;
                     this.RaisePropertyChanged(nameof(SelectedBtwDir));
                 }
             }
