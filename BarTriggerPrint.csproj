@@ -185,6 +185,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Readme.txt" />
     <Content Include="RefDlls\BarTenderPrintClient.dll" />
     <Content Include="RefDlls\Seagull.BarTender.Print.dll" />
   </ItemGroup>
