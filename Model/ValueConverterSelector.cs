@@ -15,28 +15,34 @@ namespace BarTriggerPrint.Model
             if (existingFieldsValueConvertersDict.ContainsKey(templateDir))
                 return existingFieldsValueConvertersDict[templateDir];
             FieldsValueConverter fieldsValueConverter2Create = new SimpleConverter("yyMMdd", 4);
-            if (templateDir.Contains("066"))
+            if (templateDir.Contains("6K00032"))
             {
                 fieldsValueConverter2Create = new No066Converter();
             }
-            else if (templateDir.Contains("340"))
+            else if (templateDir.Contains("6K00073"))
+            {
+                fieldsValueConverter2Create = new No386Converter();
+            }
+            else if (templateDir.Contains("6K00061"))
             {
                 fieldsValueConverter2Create = new SimpleConverter("dd-MM-yy", 7);
             }
-            else if (templateDir.Contains("460"))
+            else if (templateDir.Contains("GT303")
+                || templateDir.Contains("RT326"))
             {
                 fieldsValueConverter2Create = new No460Converter();
             }
-            else if (templateDir.Contains("463")
-                || templateDir.Contains("467"))
+            else if (templateDir.Contains("6K00093")
+                || templateDir.Contains("6K00083")
+                || templateDir.Contains("6K00084"))
             {
                 fieldsValueConverter2Create = new No463Converter();
             }
-            else if (templateDir.Contains("465"))
+            else if (templateDir.Contains("6K00035"))
             {
                 fieldsValueConverter2Create = new No465Converter();
             }
-            else if (templateDir.Contains("466"))
+            else if (templateDir.Contains("6K00079"))
             {
                 fieldsValueConverter2Create = new No466Converter();
             }
